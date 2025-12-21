@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, delay, Observable, of, throwError } from "rxjs";
+import { BehaviorSubject, defer, delay, dematerialize, materialize, Observable, of, tap, throwError } from "rxjs";
 import UserModel from "../models/user.model";
 import LoginRequest from "../requests/login.request";
 import RegisterRequest from "../requests/register.request";
@@ -31,26 +31,33 @@ export default class UserService {
     }
 
     login(request: LoginRequest) {
-        const user = this.users.get(request.username);
-        if (!user || user.password !== request.password) {
-            return throwError(() => new HttpErrorResponse({
-                status: 401,
-                statusText: 'Unauthorized',
-                error: {
-                message: 'Invalid credentials'
-                }
-            }));
-        }
+        return defer(() => {
+            const user = this.users.get(request.username);
 
-        const model: UserModel = {
-            id: user.id,
-            username: user.username
-        };
+            if (!user || user.password !== request.password) {
+                return throwError(() => new HttpErrorResponse({
+                    status: 401,
+                    statusText: 'Unauthorized',
+                    error: {
+                        message: 'Invalid credentials'
+                    }
+                }));
+            }
 
-        this.currentUserSubject.next(model);
-        localStorage.setItem('current_user', JSON.stringify(model));
+            const model: UserModel = {
+                id: user.id,
+                username: user.username
+            };
 
-        return of(void 0).pipe(delay(1000));
+            this.currentUserSubject.next(model);
+            localStorage.setItem('current_user', JSON.stringify(model));
+
+            return of(void 0);
+        }).pipe(
+            materialize(),
+            delay(1000),
+            dematerialize()
+        );
     }
 
     register(request: RegisterRequest): Observable<void> {
@@ -73,10 +80,13 @@ export default class UserService {
     }
 
     logout(): Observable<void> {
-        this.currentUserSubject.next(null);
-        localStorage.removeItem(CURRENT_USER_KEY);
-
-        return of(void 0).pipe(delay(1000));
+        return of(void 0).pipe(
+                delay(1000),
+                tap(() => {
+                    this.currentUserSubject.next(null);
+                    localStorage.removeItem(CURRENT_USER_KEY);
+                })
+        );
     }
 
     private restore() {
