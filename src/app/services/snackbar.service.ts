@@ -11,9 +11,8 @@ export class SnackbarService {
     show(message: string, duration: number = 3000) {
         this.snackbar.open(message, '', {
             duration,
-            verticalPosition: 'bottom',
             horizontalPosition: 'center',
-            panelClass: ["snack-bar"]
+            panelClass: "snack-bar"
         });
     }
 

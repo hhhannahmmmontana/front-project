@@ -48,14 +48,15 @@ export class AuthComponent implements OnDestroy {
 
         this.sub.add(
             request$
-            .pipe(finalize(() => this.cdr.detectChanges()))
+            .pipe(finalize(() => {
+                this.cdr.detectChanges();
+                this.loading = false;
+            }))
             .subscribe({
                 next: () => {
-                    debugger
                     this.router.navigateByUrl('/')
                 },
                 error: err => {
-                    debugger
                     this.snackbarService.err(err)
                 }
             })

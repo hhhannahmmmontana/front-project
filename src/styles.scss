@@ -50,6 +50,31 @@ body {
             }
         }
     }
+
+    simple-snack-bar {
+        height: 60px;
+        display: flex;
+        align-items: center;
+    }
+
+    .snack-bar {
+        bottom: 20px;
+        position: absolute;
+        max-width: 320px;
+        left: 50%;
+        transform: translateX(-50%) !important;
+
+        @media screen and (max-width: calc($md - $eps)) {
+            top: 150px;
+            bottom: auto;
+        }
+    }
+
+    @include mat.snack-bar-overrides((
+        supporting-text-size: 30px,
+        container-color: $color-accent-bg-200,
+        supporting-text-color: #FFF
+    ));
 }
 
 * {
