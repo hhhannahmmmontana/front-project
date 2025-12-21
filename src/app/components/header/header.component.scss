@@ -36,10 +36,6 @@ header {
         }
     }
 
-    .mobile {
-        display: none;
-    }
-
     .menu-button {
         color: $white;
         font-size: 40px;
@@ -87,16 +83,6 @@ header {
         }
     }
 
-    @media screen and (max-width: calc($md - $eps)) {
-        .pc {
-            display: none;
-        }
-
-        .mobile {
-            display: flex;
-        }
-    }
-
     .user-menu {
         position: absolute;
         display: flex;
@@ -121,4 +107,19 @@ header {
             }
         }
     }
+}
+
+.create-post {
+    outline: none;
+    position: absolute;
+    background-color: $color-accent-bg-200;
+    border: none;
+    right: 40px;
+    bottom: 40px;
+    font-size: 60px;
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    color: $white;
+    box-shadow: $default-shadow;
 }

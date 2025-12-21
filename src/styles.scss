@@ -61,6 +61,26 @@ a {
     }
 }
 
+@media screen and (min-width: calc($md)) {
+    .pc {
+        display: block;
+    }
+
+    .mobile {
+        display: none;
+    }
+}
+
+@media screen and (max-width: calc($md - $eps)) {
+    .pc {
+        display: none;
+    }
+
+    .mobile {
+        display: block;
+    }
+}
+
 :root {
     @mixin spinner-wrapper {
         max-width: fit-content;
