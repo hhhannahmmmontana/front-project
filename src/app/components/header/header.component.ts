@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import UserService from '../../services/user.service';
@@ -15,6 +15,21 @@ import { finalize, Subscription } from 'rxjs';
 	styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
+	@ViewChild('menu', { static: false }) menuRef!: ElementRef;
+
+	@HostListener('document:click', ['$event'])
+	onDocumentClick(event: MouseEvent) {
+		if (!this.doShowUserMenu) return;
+
+		const clickedInside = this.menuRef.nativeElement.contains(
+			event.target as Node
+		);
+
+		if (!clickedInside) {
+			this.doShowUserMenu = false;
+		}
+	}
+
 	icons = {
 		faBars: faBars,
 		faSearch: faSearch

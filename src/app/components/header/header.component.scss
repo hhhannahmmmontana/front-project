@@ -14,7 +14,6 @@ header {
         background-color: $color-accent-bg-200;
         box-shadow: $default-shadow;
         transition: $default-transition;
-        user-select: none;
 
         &:hover {
             color: $white;
@@ -28,6 +27,7 @@ header {
         justify-content: flex-start;
 
         .link, .links-el {
+            user-select: none;
             margin-left: 10px;
 
             &:first-child {
