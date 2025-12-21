@@ -9,11 +9,21 @@ import { FormsModule } from '@angular/forms';
 import SearchComponent from './search/search.component';
 import SearchModel from './search/search.model';
 import SearchService from '../../services/search.service';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { RouterLink } from "@angular/router";
+import { CommonModule } from '@angular/common';
 
 @Component({
 	standalone: true,
 	selector: 'app-header',
-	imports: [FontAwesomeModule, MatProgressSpinnerModule, FormsModule, SearchComponent],
+	imports: [
+		FontAwesomeModule,
+		MatProgressSpinnerModule,
+		FormsModule,
+		SearchComponent,
+		RouterLink,
+		CommonModule
+	],
 	templateUrl: './header.component.html',
 	styleUrl: './header.component.scss',
 })
@@ -33,12 +43,18 @@ export class HeaderComponent {
 		}
 	}
 
+	icons = {
+		faUser: faUser
+	}
+
 	currentUser: UserModel | null = null;
 	userLoading = true;
 	openMenu = false;
 	doShowUserMenu = false;
 	sub: Subscription = new Subscription();
 	searchModel: SearchModel;
+
+	loadingLogout = false;
 
 	constructor(
 		private userService: UserService,
@@ -56,15 +72,17 @@ export class HeaderComponent {
 		}
 
 		this.sub.add(
-			this.userService.getCurrentUser().pipe(
-				finalize(() => {
-					this.userLoading = false;
-					this.cdr.detectChanges();
+			this.userService.currentUser$
+				.subscribe({
+					next: user => {
+						this.currentUser = user;
+						this.userLoading = false;
+					},
+					error: err => {
+						this.snackbarService.err(err);
+						this.userLoading = false;
+					}
 				})
-			).subscribe({
-				next: user => this.currentUser = user,
-				error: err => this.snackbarService.err(err)
-			})
 		);
 	}
 
@@ -74,5 +92,20 @@ export class HeaderComponent {
 
 	toggleUserMenu() {
 		this.doShowUserMenu = !this.doShowUserMenu;
+	}
+
+	logout() {
+		if (this.loadingLogout) {
+			return;
+		}
+
+		this.loadingLogout = true;
+		this.sub.add(
+			this.userService.logout()
+				.pipe(
+					finalize(() => window.location.reload())
+				)
+				.subscribe()
+		);
 	}
 }

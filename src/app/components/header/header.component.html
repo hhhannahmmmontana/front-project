@@ -3,8 +3,8 @@
     <div class="container d-flex flex-column align-items-center">
         <div class="c-row d-flex justify-content-between w-100">
             <div class="links left pc-md">
-                <a class="link">Главная</a>
-                <a class="link">Написать анекдот</a>
+                <a class="link" routerLink="/">Главная</a>
+                <a class="link" routerLink="/post">Написать анекдот</a>
             </div>
             <div class="links left mobile">
                 <a class="link">Burning Car</a>
@@ -19,13 +19,17 @@
                     </div>
                 } @else {
                     <div class="links-el position-relative">
-                        <a (click)="toggleUserMenu()"><div class="user-avatar">
-                            <img src="/assets/img/default-user-image.png" />
+                        <a (click)="toggleUserMenu()"><div class="user-avatar image">
+                            <fa-icon [icon]="icons.faUser" />
                         </div></a>
                         @if (doShowUserMenu) {
                             <div #menu class="user-menu">
-                                <a>Открыть профиль</a>
-                                <a class="bad-color">Выход</a>
+                                @if (currentUser != null) {
+                                    <a class="bad-color" (click)="logout()">Выход</a>
+                                } @else {
+                                    <a (click)="doShowUserMenu = false" [routerLink]="'/register'">Регистрация</a>
+                                    <a (click)="doShowUserMenu = false" [routerLink]="'/login'">Вход</a>
+                                }
                             </div>
                         }
                     </div>
