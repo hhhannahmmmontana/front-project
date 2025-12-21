@@ -9,7 +9,10 @@ header {
         color: $white;
         font-size: 24px;
         font-weight: 500;
-        padding: 10px 20px;
+        padding-inline: 20px;
+        height: 50px;
+        display: flex;
+        align-items: center;
         border-radius: 5px;
         background-color: $color-accent-bg-200;
         box-shadow: $default-shadow;
@@ -45,24 +48,6 @@ header {
         .active {
             transform: rotate(90deg);
         }
-    } 
-
-    .search-icon {
-        font-size: 24px;
-        color: $color-accent-text;
-        background-color: $white;
-        padding: 10px;
-        border-radius: 50%;
-        transition: $default-transition;
-        box-shadow: $default-shadow;
-        width: 50px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-
-        &:hover {
-            opacity: $default-hover-opacity;
-        }
     }
 
     .user-avatar {
@@ -90,7 +75,7 @@ header {
         align-items: flex-start;
         top: 0;
         transform: translateY(100%) translateX(-75%);
-        background-color: $white;
+        background-color: $color-bg-100;
         padding: 10px;
         border-radius: 10px;
         box-shadow: $default-shadow;

@@ -1,0 +1,57 @@
+@use 'variables' as *;
+
+.search-input {
+    height: 50px;
+}
+
+.search-hints {
+    padding-block: 10px;
+    display: block;
+    background-color: $color-bg-100;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    font-size: 24px;
+    list-style-type: none;
+    margin-top: 10px;
+    border-radius: 10px;
+    box-shadow: $default-shadow;
+    overflow: hidden;
+
+    .search-hint {
+        padding: 10px 20px;
+        cursor: pointer;
+        &:hover {
+            background-color: #F7F7F7;
+        }
+    }
+
+    .search-spinner {
+        * {
+            max-height: 50px;
+        }
+    }
+
+    .spinner-hint {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.search-icon {
+    font-size: 24px;
+    color: $color-accent-text;
+    background-color: $color-bg-100;
+    padding: 10px;
+    border-radius: 50%;
+    transition: $default-transition;
+    box-shadow: $default-shadow;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        opacity: $default-hover-opacity;
+    }
+}

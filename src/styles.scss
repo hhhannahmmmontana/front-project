@@ -61,22 +61,42 @@ a {
     }
 }
 
-@media screen and (min-width: calc($md)) {
-    .pc {
+@media screen and (min-width: $md) {
+    .pc-md {
         display: block;
     }
 
     .mobile {
-        display: none;
+        display: none !important;
     }
 }
 
 @media screen and (max-width: calc($md - $eps)) {
-    .pc {
-        display: none;
+    .pc-md {
+        display: none !important;
     }
 
     .mobile {
+        display: block;
+    }
+}
+
+@media screen and (min-width: $lg) {
+    .pc {
+        display: block;
+    }
+
+    .mobile-md {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: calc($lg - $eps)) {
+    .pc {
+        display: none !important;
+    }
+
+    .mobile-md {
         display: block;
     }
 }
@@ -130,4 +150,13 @@ a {
             active-indicator-color: $spinner-secondary-color,
         ));
     }
+}
+
+input {
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    font-size: 24px;
+    padding: 4px 20px;
+    background-color: $color-bg-100;
 }

@@ -1,0 +1,34 @@
+
+<div class="d-flex">
+    <div class="position-relative me-2 w-100">
+        <input
+            id="pcSearchInput"
+            [(ngModel)]="model.searchInput"
+            [ngModelOptions]="{ standalone: true }"
+            (input)="searchOnInput()"
+            class="search-input w-100"
+            placeholder="Введите запрос..."
+            (focus)="searchOnFocus()"
+            (blur)="searchOnBlur()"
+            autocomplete="off"
+        />
+        @if (model.searchFocused && (model.hints.length > 0 || model.searchLoading)) {
+            <div class="search-hints w-100">
+                @if (model.hints.length == 0) {
+                    <li class="spinner-hint">
+                        <div class="search-spinner spinner-primary">
+                            <mat-progress-spinner mode="indeterminate" />
+                        </div>
+                    </li>
+                } @else {
+                    @for (hint of model.hints; track hint) {
+                        <li class="search-hint">{{hint}}</li>
+                    }
+                }
+            </div>
+        }
+    </div>
+    <a class="search-icon">
+        <fa-icon [icon]="icons.faSearch" />
+    </a>
+</div>

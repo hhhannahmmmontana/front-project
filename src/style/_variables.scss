@@ -14,6 +14,7 @@ $white: #ffe;
 $white-hover: #f7f7ee;
 
 $color-text: #000;
+$color-bg-100: #FFF;
 $color-bg-200: #ffe;
 $color-accent-text: $pallet-main-100;
 $color-accent-bg-100: $pallet-main-100;
@@ -23,7 +24,7 @@ $default-shadow: 0px 4px 15px #00000020;
 $default-transition: 0.2s linear;
 
 $spinner-primary-color: $pallet-main-100;
-$spinner-secondary-color: $white;
+$spinner-secondary-color: $color-bg-100;
 
 $default-hover-opacity: 0.85;
 

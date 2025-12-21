@@ -1,16 +1,19 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBars, faSearch } from '@fortawesome/free-solid-svg-icons';
 import UserService from '../../services/user.service';
 import UserModel from '../../models/user.model';
 import { SnackbarService } from '../../services/snackbar.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { finalize, Subscription } from 'rxjs';
+import { finalize, Subscription} from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import SearchComponent from './search/search.component';
+import SearchModel from './search/search.model';
+import SearchService from '../../services/search.service';
 
 @Component({
 	standalone: true,
 	selector: 'app-header',
-	imports: [FontAwesomeModule, MatProgressSpinnerModule],
+	imports: [FontAwesomeModule, MatProgressSpinnerModule, FormsModule, SearchComponent],
 	templateUrl: './header.component.html',
 	styleUrl: './header.component.scss',
 })
@@ -30,22 +33,21 @@ export class HeaderComponent {
 		}
 	}
 
-	icons = {
-		faBars: faBars,
-		faSearch: faSearch
-	}
-
 	currentUser: UserModel | null = null;
 	userLoading = true;
 	openMenu = false;
 	doShowUserMenu = false;
 	sub: Subscription = new Subscription();
+	searchModel: SearchModel;
 
 	constructor(
 		private userService: UserService,
+		searchService: SearchService,
 		private snackbarService: SnackbarService,
     	private cdr: ChangeDetectorRef
-	) { }
+	) {
+		this.searchModel = new SearchModel(searchService, snackbarService, cdr);
+	}
 
 	ngOnInit() {
 		if (this.currentUser != null) {

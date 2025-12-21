@@ -1,32 +1,39 @@
 
 <header>
-    <div class="container d-flex justify-content-between">
-        <div class="links left">
-            <a class="link pc">Главная</a>
-            <a class="link mobile">Burning Car</a>
-            <a class="link pc">Написать анекдот</a>
+    <div class="container d-flex flex-column align-items-center">
+        <div class="c-row d-flex justify-content-between w-100">
+            <div class="links left pc-md">
+                <a class="link">Главная</a>
+                <a class="link">Написать анекдот</a>
+            </div>
+            <div class="links left mobile">
+                <a class="link">Burning Car</a>
+            </div>
+            <div class="links right">
+                <div class="pc d-flex align-items-center">
+                    <app-search [model]="searchModel"  />
+                </div>
+                @if (userLoading) {
+                    <div class="links-el user-avatar spinner-secondary-bg">
+                        <mat-progress-spinner mode="indeterminate" />
+                    </div>
+                } @else {
+                    <div class="links-el position-relative">
+                        <a (click)="toggleUserMenu()"><div class="user-avatar">
+                            <img src="/assets/img/default-user-image.png" />
+                        </div></a>
+                        @if (doShowUserMenu) {
+                            <div #menu class="user-menu">
+                                <a>Открыть профиль</a>
+                                <a class="bad-color">Выход</a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
         </div>
-        <div class="links right">
-            <a class="links-el search-icon">
-                <fa-icon [icon]="icons.faSearch" />
-            </a>
-            @if (userLoading) {
-                <div class="links-el user-avatar spinner-secondary-bg">
-                    <mat-progress-spinner mode="indeterminate" />
-                </div>
-            } @else {
-                <div class="links-el position-relative">
-                    <a (click)="toggleUserMenu()"><div class="user-avatar">
-                        <img src="/assets/img/default-user-image.png" />
-                    </div></a>
-                    @if (doShowUserMenu) {
-                        <div #menu class="user-menu">
-                            <a>Открыть профиль</a>
-                            <a class="bad-color">Выход</a>
-                        </div>
-                    }
-                </div>
-            }
+        <div class="c-row mobile-md w-100 justify-content-end d-flex align-items-center mt-2">
+            <app-search class="w-100" [model]="searchModel" />
         </div>
     </div>
 </header>
