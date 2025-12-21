@@ -27,10 +27,19 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/style/"
+              ]
+            },
             "styles": [
               "src/styles.scss"
+            ],
+            "polyfills": [
+              "@angular/localize/init"
             ]
           },
           "configurations": {

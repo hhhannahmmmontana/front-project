@@ -1,0 +1,30 @@
+
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+$xxl: 1400px;
+$eps: 1px;
+
+$pallet-main-100: #f99d1c;
+$pallet-main-200: #ec730f;
+$pallet-main-300: #e25605;
+
+$white: #ffe;
+$white-hover: #f7f7ee;
+
+$color-text: #000;
+$color-bg-200: #ffe;
+$color-accent-text: $pallet-main-100;
+$color-accent-bg-100: $pallet-main-100;
+$color-accent-bg-200: $pallet-main-200;
+$color-accent-bg-300: $pallet-main-300;
+$default-shadow: 0px 4px 15px #00000020;
+$default-transition: 0.2s linear;
+
+$spinner-primary-color: $pallet-main-100;
+$spinner-secondary-color: $white;
+
+$default-hover-opacity: 0.85;
+
+$bad: #F00;
