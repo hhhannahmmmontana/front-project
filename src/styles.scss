@@ -45,6 +45,9 @@ body {
         > :last-child {
             flex: 1;
             width: 100%;
+            @media screen and (max-width: calc($md - $eps)) {
+                min-height: 650px;
+            }
         }
     }
 }

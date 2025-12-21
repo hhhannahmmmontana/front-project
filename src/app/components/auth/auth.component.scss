@@ -4,10 +4,11 @@
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
 }
 
 .auth-menu {
+    margin-top: 10%;
     display: flex;
     flex-direction: column;
     align-items: center;
