@@ -1,0 +1,17 @@
+
+<button (click)="showCreate = true" class="create-post">+</button>
+
+<app-menu [closable]="true" [isShowed]="showCreate" (onClose)="showCreate = false">
+    <h2 class="me-4 mb-4">Предложить анекдот</h2>
+    <textarea [(ngModel)]="createRequest.text" class="post-draft"></textarea>
+    <div class="tags-section">
+        <div class="tag-input-container">
+            <input [(ngModel)]="currentTag" class="tag-input" type="text" />
+            <button (click)="addTag()" class="tag-add">+</button>
+        </div>
+        @for (tag of createRequest.tags; track tag) {
+            <button (click)="removeTag(tag)" class="added-tag">#{{tag}}<fa-icon class="ms-2" [icon]="icons.faXmark" /></button>
+        }
+    </div>
+    <button (click)="create()" class="submit-button" [disabled]="createRequest.text.trim().length == 0">Отправить</button>
+</app-menu>

@@ -9,14 +9,15 @@ import UserModel from "../models/user.model";
 import GetPostsResponse from "../responses/get-posts.response";
 import GetCommentsResponse from "../responses/get-comments.response";
 import { POST_CONTENTS, COMMENT_CONTENTS, TAGS } from "./mock.data";
+import CreatePostRequest from "../requests/create-post.request";
 
 @Injectable({ providedIn: 'root' })
 class ExploreService {
 
     private posts: PostModel[] = [];
     private comments = new Map<number, CommentModel[]>();
-    private postIdCounter = 1;
-    private commentIdCounter = 1;
+    postIdCounter = 1;
+    commentIdCounter = 1;
     private currentUser: UserModel | null = null;
 
     constructor(
@@ -97,6 +98,20 @@ class ExploreService {
         );
     }
 
+    create(createRequest: CreatePostRequest): Observable<PostModel> {
+        return of({
+            id: ++this.postIdCounter,
+            content: createRequest.text,
+            date: new Date(),
+            author: this.currentUser?.username ?? null,
+            rating: 0,
+            ratingAmount: 0,
+            userRating: 0,
+            isFavourite: false,
+            tags: createRequest.tags
+        }).pipe(delay(1000));
+    }
+
     private checkIfAuthorizedOrThrow() {
         if (this.currentUser) {
             return of(void 0);
@@ -114,7 +129,7 @@ class ExploreService {
     private generatePosts() {
         const contents = POST_CONTENTS;
 
-        for (const text of contents) {
+        for (const text of contents.slice(0, 10)) {
             const id = this.postIdCounter++;
 
             this.posts.push({
@@ -145,10 +160,10 @@ class ExploreService {
         }
     }
 
-    private generateTags(): string[] {
+    private generateTags(): Set<string> {
         const count = 1 + Math.floor(Math.random() * 4);
         const shuffled = [...TAGS].sort(() => 0.5 - Math.random());
-        return shuffled.slice(0, count);
+        return new Set(shuffled.slice(0, count));
     }
 }
 

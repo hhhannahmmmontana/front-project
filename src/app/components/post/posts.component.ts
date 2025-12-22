@@ -13,6 +13,7 @@ import { RatingComponent } from "./rating/rating.component";
 import UserService from "../../services/user.service";
 import UserModel from "../../models/user.model";
 import { Router } from "@angular/router";
+import { CreateComponent } from "../create/create.component";
 
 const POSTS_PAGE_SIZE = 9;
 
@@ -24,7 +25,8 @@ const POSTS_PAGE_SIZE = 9;
         MatProgressSpinner,
         CommentsComponent,
         RatingComponent,
-        CommonModule
+        CommonModule,
+        CreateComponent
     ],
     templateUrl: "./posts.component.html",
     styleUrl: "./posts.component.scss"
@@ -144,4 +146,8 @@ export class PostsComponent {
         }
 		this.dropdownedPost = post;
 	}
+
+    addPost(postModel: PostModel) {
+        this.posts = [postModel, ...this.posts];
+    }
 }

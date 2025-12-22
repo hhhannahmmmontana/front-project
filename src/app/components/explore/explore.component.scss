@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding-top: 20px;
     padding-bottom: 150px;
 }
 
@@ -20,25 +20,5 @@
         transform: translate(10px, 20px);
         transition: transform 0.25s ease;
         z-index: -1;
-    }
-}
-
-.create-post {
-    outline: none;
-    position: fixed;
-    background-color: $color-accent-bg-200;
-    border: none;
-    right: 40px;
-    bottom: 50px;
-    font-size: 60px;
-    height: 80px;
-    width: 80px;
-    border-radius: 50%;
-    color: $white;
-    box-shadow: $default-shadow;
-    z-index: 100;
-
-    @media screen and (min-width: ($xl)) {
-        right: 15%
     }
 }

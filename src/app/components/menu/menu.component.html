@@ -1,0 +1,10 @@
+@if (isShowed) {
+    <div class="menu-screen">
+        <div class="menu container">
+            @if (closable) {
+                <a (click)="close()"><fa-icon class="cross" [icon]="icons.faCross" /></a>
+            }
+            <ng-content></ng-content>
+        </div>
+    </div>
+}

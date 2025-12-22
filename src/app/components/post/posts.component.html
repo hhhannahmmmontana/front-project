@@ -11,13 +11,15 @@
                     }
                 </a>
             </div>
-            <div class="tags"><span class="tag-title">Теги</span>@for (tag of post.tags; track tag) {
-                <div class="tags-container">
-                    <a
-                        class="tag"
-                        [href]="'/?tag=' + tag"
-                    >#{{ tag }}</a></div>
-            }</div>
+            @if (post.tags.size > 0) {
+                <div class="tags"><span class="tag-title">Теги</span>@for (tag of post.tags; track tag) {
+                    <div class="tags-container">
+                        <a
+                            class="tag"
+                            [href]="'/?tag=' + tag"
+                        >#{{ tag }}</a></div>
+                }</div>
+            }
             <div class="content">
                 {{post.content}}
             </div>
@@ -46,3 +48,5 @@
         </div>
     }
 </div>
+
+<app-create (onPost)="addPost($event)" />
