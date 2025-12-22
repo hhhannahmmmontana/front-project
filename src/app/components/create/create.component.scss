@@ -17,7 +17,7 @@
     transition: $default-transition;
 
     @media screen and (min-width: ($xl)) {
-        right: 15%
+        right: 15%ж
     }
 
     &:hover {
@@ -72,6 +72,7 @@
     margin-bottom: 10px;
     margin-right: 10px;
     border-right: 0;
+    flex-grow: 1;
 
     .tag-add {
         outline: none;

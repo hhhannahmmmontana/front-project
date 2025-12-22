@@ -93,6 +93,12 @@ export default class SearchModel {
             return;
         }
 
-        window.location.href = '/?q=' + encodeURIComponent(this.searchInput);
+
+        this.searchInput = this.searchInput.trim();
+
+        this.router.navigate(['/'], {
+            queryParams: { q: this.searchInput },
+            queryParamsHandling: 'merge'
+        });
     }
 }

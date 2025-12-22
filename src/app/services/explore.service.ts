@@ -13,7 +13,6 @@ import CreatePostRequest from "../requests/create-post.request";
 
 @Injectable({ providedIn: 'root' })
 class ExploreService {
-
     private posts: PostModel[] = [];
     private comments = new Map<number, CommentModel[]>();
     postIdCounter = 1;
@@ -27,8 +26,6 @@ class ExploreService {
         this.userService.currentUser$.subscribe(user => {
             this.currentUser = user;
         });
-
-        this.generatePosts();
     }
 
     getPosts(
@@ -38,6 +35,9 @@ class ExploreService {
         search: string | null,
         onlyFavourites: boolean
     ): Observable<GetPostsResponse> {
+        if (token == null) {
+            this.generatePosts();
+        }
         const offset = token ? Number(token) : 0;
         const posts = this.posts.slice(offset, offset + pageSize);
         const nextOffset = offset + posts.length;

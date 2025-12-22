@@ -42,6 +42,7 @@ export class AuthComponent implements OnDestroy {
 
         this.loading = true;
 
+        this.username = this.username.trim();
         const request$ =this.type === 'login'
             ? this.authService.login(new LoginRequest(this.username, this.password))
             : this.authService.register(new RegisterRequest(this.username, this.password));

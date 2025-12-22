@@ -2,7 +2,7 @@
     <div class="container d-flex flex-column align-items-center">
         <div class="c-row d-flex justify-content-between w-100">
             <div class="links left">
-                <a class="link" routerLink="/">Burning Car</a>
+                <a class="link" [routerLink]="['/']">Burning Car</a>
             </div>
             <div class="links right">
                 <div class="pc d-flex align-items-center">
@@ -20,7 +20,7 @@
                         @if (doShowUserMenu) {
                             <div #menu class="user-menu">
                                 @if (currentUser != null) {
-                                    <a class="bad-color" href="/?favourites">Избранное</a>
+                                    <a class="bad-color" [routerLink]="['']" [queryParams]="{ favourites: true }">Избранное</a>
                                     <a class="bad-color" (click)="logout()">Выход</a>
                                 } @else {
                                     <a (click)="doShowUserMenu = false" [routerLink]="'/register'">Регистрация</a>

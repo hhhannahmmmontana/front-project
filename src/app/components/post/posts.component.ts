@@ -12,7 +12,7 @@ import { CommentsComponent } from "./comment/comments.component";
 import { RatingComponent } from "./rating/rating.component";
 import UserService from "../../services/user.service";
 import UserModel from "../../models/user.model";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { CreateComponent } from "../create/create.component";
 
 const POSTS_PAGE_SIZE = 9;
@@ -26,7 +26,9 @@ const POSTS_PAGE_SIZE = 9;
         CommentsComponent,
         RatingComponent,
         CommonModule,
-        CreateComponent
+        CreateComponent,
+        RouterLink,
+        CommonModule
     ],
     templateUrl: "./posts.component.html",
     styleUrl: "./posts.component.scss"
@@ -53,25 +55,42 @@ export class PostsComponent {
 		faCaretDown: faCaretDown
 	}
 
+    sub = new Subscription();
     currentUser!: UserModel | null;
+    loadingPosts = false;
+    postsToken: string | null = null;
+	posts: PostModel[] = [];
+    dropdownedPost: PostModel | null = null;
 
     ngOnInit() {
         this.loadPosts();
-        this.userService.currentUser$.subscribe({
+        this.sub.add(this.userService.currentUser$.subscribe({
             next: user => {
                 this.currentUser = user;
             },
             error: err => {
                 this.currentUser = null;
             }
-        })
-    }
+        }));
 
-    loadingPosts = false;
-    sub = new Subscription();
-    postsToken: string | null = null;
-	posts: PostModel[] = [];
-    dropdownedPost: PostModel | null = null;
+        this.sub.add(this.route.queryParams.subscribe(params => {
+            const newSearch = params['q'] ?? null;
+            const newTag = params['tag'] ?? null;
+            const newFavourites = params['favourites'] ?? false;
+
+            if (newSearch !== this.search || newTag != this.tag || newFavourites != this.onlyFavourites) {
+                this.search = newSearch;
+                this.tag = newTag;
+                this.onlyFavourites = newFavourites;
+                this.postsToken = null;
+
+                this.dropdownedPost = null;
+                this.postsToken = null;
+                this.posts = [];
+                this.loadPosts();
+            }
+        }));
+    }
 
     get authorized(): boolean {
         return this.currentUser != null;
@@ -82,7 +101,8 @@ export class PostsComponent {
         private cdr: ChangeDetectorRef,
         public snackbarService: SnackbarService,
         private userService: UserService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) { }
 
 	loadPosts() {

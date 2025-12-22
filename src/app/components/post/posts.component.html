@@ -16,7 +16,8 @@
                     <div class="tags-container">
                         <a
                             class="tag"
-                            [href]="'/?tag=' + tag"
+                            routerLink="/"
+                            [queryParams]="{ tag: tag }"
                         >#{{ tag }}</a></div>
                 }</div>
             }
