@@ -40,6 +40,7 @@ export class ExploreComponent {
 	loadingPosts = false;
 	postsToken: string | null = null;
 	posts: PostModel[] = [];
+	starsRange = [1, 2, 3, 4, 5];
 
 	private commandQueue$ = new Subject<Command>();
 
@@ -104,6 +105,60 @@ export class ExploreComponent {
 				this.cdr.detectChanges();
 				return throwError(() => err);
 			}));
+		});
+	}
+
+	hoveredRatings = new Map<number, number>();
+
+    onStarHover(post: PostModel, rating: number) {
+        this.hoveredRatings.set(post.id, rating);
+    }
+
+    onStarLeave(post: PostModel) {
+        this.hoveredRatings.delete(post.id);
+    }
+
+    getStarWidth(post: PostModel): number {
+        const hover = this.hoveredRatings.get(post.id);
+        
+        if (hover !== undefined) {
+            return (hover / 5) * 100;
+        }
+        
+        if (post.userRating != null) {
+            return (post.userRating / 5) * 100;
+        }
+        
+        return (post.rating / 5) * 100;
+    }
+
+	getStarColorClass(post: PostModel): string {
+		if (this.hoveredRatings.has(post.id)) {
+			return 'stars-hover';
+		}
+		
+		if (post.userRating != null) {
+			return 'stars-user-rated';
+		}
+
+		return 'stars-average';
+	}
+
+	ratePost(post: PostModel, rating: number) {
+		const prevRating = post.rating;
+		post.userRating = rating;
+
+		this.enqueue(() => {		
+			return this.exploreService.ratePost(post.id, rating)
+				.pipe(catchError((err: HttpErrorResponse) => {
+					if ([401, 403].includes(err.status)) {
+						post.userRating = null;
+					} else {
+						post.userRating = prevRating;
+					}
+					this.cdr.detectChanges();
+					return throwError(() => err);
+				}));
 		});
 	}
 

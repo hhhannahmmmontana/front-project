@@ -6,18 +6,43 @@
                     <h2>Анекдот от {{post.date | date:'dd.MM.yyyy HH:mm'}}</h2>
                     <a (click)="toggleFavourite(post)">
                         @if (post.isFavourite) {
-                            <fa-icon class="star favourite" [icon]="icons.faStarSolid" />
+                            <fa-icon class="star-favourite favourite" [icon]="icons.faStarSolid" />
                         } @else {
-                            <fa-icon class="star" [icon]="icons.faStarRegular" />
+                            <fa-icon class="star-favourite" [icon]="icons.faStarRegular" />
                         }
                     </a>
                 </div>
                 <div class="content">
                     {{post.content}}
                 </div>
-                <span class="author">Автор: {{post.author ? post.author : "Аноним"}}</span>
-                <div class="real-rating-container">
-
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="author">Автор: {{post.author ? post.author : "Аноним"}}</span>
+                    <div class="rating-container">
+                        <div class="d-flex flex-column">
+                            <div class="position-relative" (mouseleave)="onStarLeave(post)">
+                                <div class="stars-layer stars-empty">
+                                    @for (i of starsRange; track i) {
+                                        <fa-icon
+                                            [icon]="icons.faStarRegular"
+                                            class="star-icon"
+                                            (mouseenter)="onStarHover(post, i)"
+                                            (click)="ratePost(post, i)"
+                                        ></fa-icon>
+                                    }
+                                </div>
+                                <div
+                                    class="stars-layer stars-filled"
+                                    [ngClass]="getStarColorClass(post)"
+                                    [style.width.%]="getStarWidth(post)"
+                                >
+                                    @for (i of starsRange; track i) {
+                                        <fa-icon [icon]="icons.faStarSolid" class="star-icon"></fa-icon>
+                                    }
+                                </div>
+                            </div>
+                            <span class="rated-amount text-end">Оценили: {{post.ratingAmount}}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         }

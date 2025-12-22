@@ -58,19 +58,9 @@ class ExploreService {
     }
 
     ratePost(postId: number, rating: number): Observable<void> {
-        this.checkIfAuthorizedOrThrow();
-
-        const post = this.posts.find(p => p.id === postId);
-        if (post) {
-            if (post.userRating != null) {
-                post.rating -= post.userRating / post.ratingAmount--;
-            }
-
-            post.userRating = rating;
-            post.rating += post.userRating / ++post.ratingAmount;
-        }
-
-        return of(void 0).pipe(delay(300));
+        return timer(1000).pipe(
+            mergeMap(() => this.checkIfAuthorizedOrThrow())
+        );
     }
 
     commentPost(postId: number, content: string): Observable<void> {
@@ -123,7 +113,7 @@ class ExploreService {
                 content: text,
                 date: new Date(Date.now() - Math.random() * 1e10),
                 author: Math.random() > 0.2 ? `user${Math.ceil(Math.random() * 10)}` : null,
-                rating: Math.ceil(Math.random() * 5),
+                rating: Math.ceil(Math.random() * 80 + 20) / 20,
                 ratingAmount: Math.ceil(Math.random() * 100),
                 userRating: null,
                 isFavourite: false,
