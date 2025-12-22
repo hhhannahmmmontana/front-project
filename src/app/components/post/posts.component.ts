@@ -12,7 +12,7 @@ import { CommentsComponent } from "./comment/comments.component";
 import { RatingComponent } from "./rating/rating.component";
 import UserService from "../../services/user.service";
 import UserModel from "../../models/user.model";
-import { Router, RouterLink } from "@angular/router";
+import { Router } from "@angular/router";
 
 const POSTS_PAGE_SIZE = 9;
 
@@ -24,7 +24,6 @@ const POSTS_PAGE_SIZE = 9;
         MatProgressSpinner,
         CommentsComponent,
         RatingComponent,
-        RouterLink,
         CommonModule
     ],
     templateUrl: "./posts.component.html",

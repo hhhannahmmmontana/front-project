@@ -1,21 +1,5 @@
 @use 'variables' as *;
 
-.create-post {
-    outline: none;
-    position: fixed;
-    background-color: $color-accent-bg-200;
-    border: none;
-    right: 40px;
-    bottom: 50px;
-    font-size: 60px;
-    height: 80px;
-    width: 80px;
-    border-radius: 50%;
-    color: $white;
-    box-shadow: $default-shadow;
-    z-index: 100;
-}
-
 .loading-spinner {
     max-width: fit-content;
     * {
