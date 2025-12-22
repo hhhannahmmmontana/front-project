@@ -55,24 +55,20 @@
     }
 }
 
-.tags-section {
-    display: flex;
-    flex-wrap: wrap;
-}
-
 .tag-input-container {
     border: 1px dashed #AAA;
     width: fit-content;
     border-radius: 5px;
+    max-height: 60px;
     @media screen and (max-width: ($md - $eps)) {
         height: 45px;
+        width: 100%;
     }
     display: inline-flex;
     align-items: center;
     margin-bottom: 10px;
     margin-right: 10px;
     border-right: 0;
-    flex-grow: 1;
 
     .tag-add {
         outline: none;
