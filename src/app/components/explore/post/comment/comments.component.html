@@ -1,0 +1,34 @@
+<div class="comment-section">
+    @if (loadingComments) {
+        <div class="d-flex justify-content-center">
+            <div class="comment-spinner spinner-primary">
+                <mat-progress-spinner mode="indeterminate" />
+            </div>
+        </div>
+    } @else if (token ?? null != null) {
+        <button (click)="updateComments()" class="load-comments">
+            Загрузить еще комментарии
+        </button>
+    }
+    @for (comment of comments; track comment.id) {
+        <div class="comment">
+            <div class="content">
+                {{comment.content}}
+            </div>
+            <div class="author">{{comment.author ?? 'Аноним'}} в {{comment.date | date:'HH:mm, dd.MM.yyyy'}}</div>
+        </div>
+    }
+    <div class="leave-comment comment">
+        <textarea
+            class="comment-textarea"
+            [(ngModel)]="draft"
+        ></textarea>
+        <div class="w-100 d-flex justify-content-end mt-2">
+            <button
+                (click)="sendComment()"
+                class="send-comment"
+                [disabled]="draft.length == 0"
+            >Отправить комментарий</button>
+        </div>
+    </div>
+</div>

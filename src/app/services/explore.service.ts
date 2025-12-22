@@ -46,9 +46,10 @@ class ExploreService {
         pageSize: number,
         token: string | null
     ): Observable<GetCommentsResponse> {
+        debugger
         const offset = token ? Number(token) : 0;
         const all = this.comments.get(postId) ?? [];
-        const comments = all.slice(offset, offset + pageSize);
+        const comments = all.slice(offset, offset + pageSize).reverse();
         const nextOffset = offset + comments.length;
 
         return of({
@@ -63,17 +64,19 @@ class ExploreService {
         );
     }
 
-    commentPost(postId: number, content: string): Observable<void> {
-        const list = this.comments.get(postId) ?? [];
+    commentPost(postId: number, content: string): Observable<CommentModel> {
+        const model = {
+            id: ++this.commentIdCounter,
+            content: content,
+            author: this.currentUser?.username ?? null,
+            date: new Date()
+        };
 
-        list.unshift({
-            id: this.commentIdCounter++,
-            content,
-            author: this.currentUser ? this.currentUser.username : null
-        });
+        this.comments.set(postId, [model, ...(this.comments.get(postId) ?? [])])
 
-        this.comments.set(postId, list);
-        return of(void 0).pipe(delay(400));
+        return of(model).pipe(
+            delay(1000)
+        );
     }
 
     addToFavourites(postId: number): Observable<void> {
@@ -127,7 +130,8 @@ class ExploreService {
                 comments.push({
                     id: this.commentIdCounter++,
                     content: COMMENT_CONTENTS[Math.floor(Math.random() * COMMENT_CONTENTS.length)],
-                    author: Math.random() > 0.3 ? `user${Math.ceil(Math.random() * 20)}` : null
+                    author: Math.random() > 0.3 ? `user${Math.ceil(Math.random() * 20)}` : null,
+                    date: new Date(Date.now() - Math.random() * 1e10)
                 });
             }
 

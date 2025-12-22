@@ -1,0 +1,82 @@
+@use 'variables' as *;
+
+:host {
+    width: 100%;
+}
+
+.comment-section {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.comment-spinner {
+    * {
+        max-width: 50px;
+    }
+}
+
+.comment {
+    background: white;
+    font-size: 20px;
+    box-shadow: $default-shadow;
+    margin-top: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    
+    .author {
+        margin-top: 10px;
+        text-align: end;
+        color: #555;
+    }
+}
+
+.comment-textarea {
+    width: 100%;
+    resize: none;
+    height: 100px;
+    outline: none;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.send-comment {
+    width: 100%;
+    outline: none;
+    border: none;
+    background-color: $color-accent-bg-100;
+    color: #FFF;
+    padding: 10px;
+    font-size: 20px;
+    box-shadow: 0px 0px 4px #00000010;
+    border-radius: 5px;
+    transition: $default-transition;
+    font-weight: 500;
+
+    &:hover {
+        background-color: $color-accent-bg-200;
+    }
+
+    &:disabled {
+        background-color: #999;
+    }
+}
+
+.load-comments {
+    width: 100%;
+    outline: none;
+    border: none;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: $color-accent-bg-100;
+    font-size: 20px;
+    font-weight: 500;
+    color: #FFF;
+    box-shadow: $default-shadow;
+    transition: $default-transition;
+
+    &:hover {
+        background-color: $color-accent-bg-200;
+    }
+}

@@ -1,0 +1,44 @@
+<div class="posts container">
+    @for (post of posts; track post.id) {
+        <div class="post">
+            <div class="header">
+                <h2>Анекдот от {{post.date | date:'dd.MM.yyyy HH:mm'}}</h2>
+                <a (click)="toggleFavourite(post)">
+                    @if (post.isFavourite) {
+                        <fa-icon class="star-favourite favourite" [icon]="icons.faStarSolid" />
+                    } @else {
+                        <fa-icon class="star-favourite" [icon]="icons.faStarRegular" />
+                    }
+                </a>
+            </div>
+            <div class="tags">Теги: @for (tag of post.tags; track tag) {
+                <span class="tag">#{{ tag }}</span>
+            }</div>
+            <div class="content">
+                {{post.content}}
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="author">Автор: {{post.author ? post.author : "Аноним"}}</span>
+                    <div class="comments-dropdown" [class.active]="dropdownedPost == post">
+                        <button (click)="setDropdown(post)">
+                            Комментарии <div class="comments-caret-icon" >
+                                <fa-icon [icon]="icons.faCaretDown" />
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                <app-rating [post]="post" />
+            </div>
+        </div>
+        @if (dropdownedPost == post) {
+            <app-comments [post]="post" />
+        }     
+    }
+    @if (loadingPosts) {
+        <div class="loading-spinner spinner-primary">
+            <mat-progress-spinner mode="indeterminate" />
+        </div>
+    }
+</div>
