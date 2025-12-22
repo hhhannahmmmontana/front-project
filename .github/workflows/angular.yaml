@@ -30,10 +30,10 @@ jobs:
           npx ng build --configuration production --base-href /frontend-project/
 
       - name: Copy index.html to 404.html
-        run: cp dist/frontend-project/browser/index.html dist/frontend-project/browser/404.html
+        run: cp dist/frontend-project/index.html dist/frontend-project/404.html
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: dist/frontend-project/browser
+          folder: dist/frontend-project
