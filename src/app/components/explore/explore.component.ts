@@ -1,14 +1,20 @@
 import { Component } from '@angular/core';
 import { PostsComponent } from "../post/posts.component";
 import { ActivatedRoute } from '@angular/router';
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
 	selector: 'app-explore',
-	imports: [PostsComponent],
+	imports: [PostsComponent, FaIconComponent],
 	templateUrl: './explore.component.html',
 	styleUrl: './explore.component.scss'
 })
 export class ExploreComponent {
+	icons = {
+		faStar: faStar
+	}
+
 	query: string | null = null;
 	tag: string | null = '';
 	onlyFavourites: boolean = false;

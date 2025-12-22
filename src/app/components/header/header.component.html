@@ -20,6 +20,7 @@
                         @if (doShowUserMenu) {
                             <div #menu class="user-menu">
                                 @if (currentUser != null) {
+                                    <a class="bad-color" href="/?favourites">Избранное</a>
                                     <a class="bad-color" (click)="logout()">Выход</a>
                                 } @else {
                                     <a (click)="doShowUserMenu = false" [routerLink]="'/register'">Регистрация</a>
