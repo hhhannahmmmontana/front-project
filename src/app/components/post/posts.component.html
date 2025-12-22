@@ -11,8 +11,13 @@
                     }
                 </a>
             </div>
-            <div class="tags">Теги: @for (tag of post.tags; track tag) {
-                <span class="tag">#{{ tag }}</span>
+            <div class="tags"><span class="tag-title">Теги</span>@for (tag of post.tags; track tag) {
+                <div class="tags-container">
+                    <a
+                        class="tag"
+                        [routerLink]="['/']"
+                        [queryParams]="{tag: tag}"
+                    >#{{ tag }}</a></div>
             }</div>
             <div class="content">
                 {{post.content}}
@@ -29,7 +34,7 @@
                         </button>
                     </div>
                 </div>
-                <app-rating [post]="post" />
+                <app-rating [post]="post" [authorized]="authorized" />
             </div>
         </div>
         @if (dropdownedPost == post) {

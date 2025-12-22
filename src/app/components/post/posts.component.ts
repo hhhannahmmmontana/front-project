@@ -1,25 +1,40 @@
-import { ChangeDetectorRef, Component, HostListener } from "@angular/core";
+import { ChangeDetectorRef, Component, HostListener, Input } from "@angular/core";
 import { finalize, Subscription } from "rxjs";
-import ExploreService from "../../../services/explore.service";
-import { SnackbarService } from "../../../services/snackbar.service";
-import PostModel from "../../../models/post.model";
+import ExploreService from "../../services/explore.service";
+import { SnackbarService } from "../../services/snackbar.service";
+import PostModel from "../../models/post.model";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { DatePipe } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { faCaretDown, faStar as faStarSolid } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 import { CommentsComponent } from "./comment/comments.component";
 import { RatingComponent } from "./rating/rating.component";
+import UserService from "../../services/user.service";
+import UserModel from "../../models/user.model";
+import { Router, RouterLink } from "@angular/router";
 
 const POSTS_PAGE_SIZE = 9;
 
 @Component({
     selector: "app-posts",
-    imports: [FontAwesomeModule, DatePipe, MatProgressSpinner, CommentsComponent, RatingComponent],
+    imports: [
+        FontAwesomeModule,
+        DatePipe,
+        MatProgressSpinner,
+        CommentsComponent,
+        RatingComponent,
+        RouterLink,
+        CommonModule
+    ],
     templateUrl: "./posts.component.html",
     styleUrl: "./posts.component.scss"
 })
 export class PostsComponent {
+    @Input() tag: string | null = null;
+    @Input() search: string | null = null;
+    @Input() onlyFavourites: boolean = false;
+
     @HostListener('window:scroll', [])
   	onWindowScroll() {
     	const height = document.documentElement.scrollHeight;
@@ -37,21 +52,37 @@ export class PostsComponent {
 		faCaretDown: faCaretDown
 	}
 
+    currentUser!: UserModel | null;
+
+    ngOnInit() {
+        this.loadPosts();
+        this.userService.currentUser$.subscribe({
+            next: user => {
+                this.currentUser = user;
+            },
+            error: err => {
+                this.currentUser = null;
+            }
+        })
+    }
+
     loadingPosts = false;
     sub = new Subscription();
     postsToken: string | null = null;
 	posts: PostModel[] = [];
     dropdownedPost: PostModel | null = null;
 
+    get authorized(): boolean {
+        return this.currentUser != null;
+    }
+
     constructor(
         private exploreService: ExploreService,
         private cdr: ChangeDetectorRef,
-        public snackbarService: SnackbarService
+        public snackbarService: SnackbarService,
+        private userService: UserService,
+        private router: Router
     ) { }
-
-    ngOnInit() {
-		this.loadPosts();
-	}
 
 	loadPosts() {
 		if (this.loadingPosts) {
@@ -59,8 +90,13 @@ export class PostsComponent {
 		}
 
 		this.loadingPosts = true;
-		this.sub.add(this.exploreService.getPosts(POSTS_PAGE_SIZE, this.postsToken)
-			.pipe(finalize(() => {
+		this.sub.add(this.exploreService.getPosts(
+                POSTS_PAGE_SIZE,
+                this.postsToken,
+                this.tag,
+                this.search,
+                this.onlyFavourites
+            ).pipe(finalize(() => {
 				this.loadingPosts = false;
 				this.cdr.detectChanges();
 			}))
@@ -74,6 +110,11 @@ export class PostsComponent {
 	}
 
 	toggleFavourite(post: PostModel) {
+        if (!this.authorized) {
+            this.router.navigateByUrl('/register');
+            return;
+        }
+
 		const prevFavourite = post.isFavourite;
 		post.isFavourite = !post.isFavourite;
 
@@ -82,16 +123,19 @@ export class PostsComponent {
 				: this.exploreService.removeFromFavorites(post.id)
 
 			
-        this.sub.add(command.subscribe({
-            error: err => {
-                if ([401, 403].includes(err.status)) {
-                    post.isFavourite = false;
-                } else {
-                    post.isFavourite = prevFavourite;
+        this.sub.add(command
+            .pipe(finalize(() => this.cdr.detectChanges()))
+            .subscribe({
+                error: err => {
+                    if ([401, 403].includes(err.status)) {
+                        post.isFavourite = false;
+                    } else {
+                        post.isFavourite = prevFavourite;
+                    }
+                    this.cdr.detectChanges();
+                    this.snackbarService.err(err);
                 }
-                this.cdr.detectChanges();
-            }
-        }));
+            }));
 	}
 
     setDropdown(post: PostModel) {

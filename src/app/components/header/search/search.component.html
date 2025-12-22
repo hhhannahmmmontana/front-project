@@ -11,6 +11,7 @@
             (focus)="searchOnFocus()"
             (blur)="searchOnBlur()"
             autocomplete="off"
+            (keydown.enter)="search()"
         />
         @if (model.searchFocused && (model.hints.length > 0 || model.searchLoading)) {
             <div class="search-hints w-100">
@@ -29,6 +30,6 @@
         }
     </div>
     <a class="search-icon pc-md">
-        <fa-icon [icon]="icons.faSearch" />
+        <fa-icon (click)="search()" [icon]="icons.faSearch" />
     </a>
 </div>

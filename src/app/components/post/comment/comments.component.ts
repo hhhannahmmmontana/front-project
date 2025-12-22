@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy } from "@angular/core";
 import { MatProgressSpinner } from "@angular/material/progress-spinner";
-import CommentModel from "../../../../models/comment.model";
-import PostModel from "../../../../models/post.model";
+import CommentModel from "../../../models/comment.model";
+import PostModel from "../../../models/post.model";
 import { finalize, Subscription } from "rxjs";
-import ExploreService from "../../../../services/explore.service";
-import { SnackbarService } from "../../../../services/snackbar.service";
+import ExploreService from "../../../services/explore.service";
+import { SnackbarService } from "../../../services/snackbar.service";
 import { FormsModule } from "@angular/forms";
 import { DatePipe } from "@angular/common";
 

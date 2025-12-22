@@ -51,9 +51,30 @@
             }
         }
 
+        .tag-title {
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            @media screen and (max-width: calc($md - $eps)) {
+                width: 100%;
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+        }
+
         .tags {
             color: #333;
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .tags-container {
+            display: flex;
+            justify-content: start;
+            align-items: center;
         }
 
         .tag {
@@ -66,6 +87,7 @@
             margin-right: 5px;
             cursor: pointer;
             transition: $default-transition;
+            margin-bottom: 5px;
 
             &:hover {
                 background-color: $color-accent-bg-200;

@@ -13,6 +13,7 @@ import {
 } from "rxjs";
 import SearchService from "../../../services/search.service";
 import { SnackbarService } from "../../../services/snackbar.service";
+import { Router } from "@angular/router";
 
 export default class SearchModel {
     searchInput = "";
@@ -26,7 +27,8 @@ export default class SearchModel {
     constructor(
         private searchService: SearchService,
         private snackbarService: SnackbarService,
-        private cdr: ChangeDetectorRef
+        private cdr: ChangeDetectorRef,
+        private router: Router
     ) { }
 
     init() {
@@ -84,5 +86,13 @@ export default class SearchModel {
 
     onBlur() {
         this.searchFocused = false;
+    }
+
+    search() {
+        if (this.searchInput.length == 0) {
+            return;
+        }
+
+        window.location.href = '/?q=' + encodeURIComponent(this.searchInput);
     }
 }

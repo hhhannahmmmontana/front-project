@@ -1,4 +1,11 @@
 <div class="explore-screen">
+    @if (query) {
+        <h2>Результаты по запросу {{query}}</h2>
+    } @else if (tag) {
+        <h2 class="tag">#{{tag}}</h2>
+    } @else if (onlyFavourites) {
+        <h2>Избранное</h2>
+    }
     <app-posts />
 </div>
 

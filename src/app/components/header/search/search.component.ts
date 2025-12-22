@@ -47,4 +47,8 @@ export default class SearchComponent {
     searchOnBlur() {
         this.model.onBlur();
     }
+
+    search() {
+        this.model.search();
+    }
 }

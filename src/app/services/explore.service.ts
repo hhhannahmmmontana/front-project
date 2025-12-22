@@ -30,7 +30,13 @@ class ExploreService {
         this.generatePosts();
     }
 
-    getPosts(pageSize: number, token: string | null): Observable<GetPostsResponse> {
+    getPosts(
+        pageSize: number,
+        token: string | null,
+        tag: string | null,
+        search: string | null,
+        onlyFavourites: boolean
+    ): Observable<GetPostsResponse> {
         const offset = token ? Number(token) : 0;
         const posts = this.posts.slice(offset, offset + pageSize);
         const nextOffset = offset + posts.length;

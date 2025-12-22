@@ -1,13 +1,13 @@
-import { ChangeDetectorRef, Component, Input } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnDestroy } from "@angular/core";
 import { faStar as faStarRegular } from "@fortawesome/free-regular-svg-icons";
 import { faStar as faStarSolid } from "@fortawesome/free-solid-svg-icons";
-import PostModel from "../../../../models/post.model";
-import ExploreService from "../../../../services/explore.service";
-import { catchError, throwError } from "rxjs";
-import { HttpErrorResponse } from "@angular/common/http";
+import PostModel from "../../../models/post.model";
+import ExploreService from "../../../services/explore.service";
+import { Subscription } from "rxjs";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { CommonModule } from "@angular/common";
-import { SnackbarService } from "../../../../services/snackbar.service";
+import { SnackbarService } from "../../../services/snackbar.service";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-rating",
@@ -15,20 +15,23 @@ import { SnackbarService } from "../../../../services/snackbar.service";
     templateUrl: "./rating.component.html",
     styleUrl: "./rating.component.scss"
 })
-export class RatingComponent {
+export class RatingComponent implements OnDestroy {
     icons = {
         faStarSolid: faStarSolid,
         faStarRegular: faStarRegular
     }
 
     starsRange = [1, 2, 3, 4, 5];
+    sub = new Subscription();
 
+    @Input() authorized!: boolean;
     @Input() post!: PostModel
 
     constructor(
         private exploreService: ExploreService,
         private cdr: ChangeDetectorRef,
-        public snackbarService: SnackbarService
+        public snackbarService: SnackbarService,
+        private router: Router
     ) { }
 
     hoveredRating: number | null = null;
@@ -42,7 +45,6 @@ export class RatingComponent {
     }
 
     getStarWidth(): number {
-        
         if (this.hoveredRating != null) {
             return (this.hoveredRating / 5) * 100;
         }
@@ -67,10 +69,15 @@ export class RatingComponent {
     }
 
     ratePost(rating: number) {
+        if (!this.authorized) {
+            this.router.navigateByUrl('register');
+            return;
+        }
+
         const prevRating = this.post.rating;
         this.post.userRating = rating;
 
-        return this.exploreService.ratePost(this.post.id, rating)
+        this.sub.add(this.exploreService.ratePost(this.post.id, rating)
             .subscribe({
                 error: err => {
                     if ([401, 403].includes(err.status)) {
@@ -81,6 +88,10 @@ export class RatingComponent {
                     this.cdr.detectChanges();
                     this.snackbarService.err(err);
                 }
-            })
+            }));
+    }
+
+    ngOnDestroy(): void {
+        this.sub.unsubscribe();
     }
 }
