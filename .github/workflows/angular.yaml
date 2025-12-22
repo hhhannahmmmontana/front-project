@@ -29,11 +29,12 @@ jobs:
         run: |
           npx ng build --configuration production --base-href /frontend-project/
 
+      - name: Debug Output Structure
+        run: ls -R dist
+
       - name: Copy index.html to 404.html
         run: cp dist/frontend-project/index.html dist/frontend-project/404.html
 
-      - name: Debug Output Structure
-        run: ls -R dist
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
