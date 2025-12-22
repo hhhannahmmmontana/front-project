@@ -24,6 +24,7 @@
 
     .search-hint {
         padding: 15px 20px;
+        z-index: 100;
         @media screen and (max-width: ($md - $eps)) {
             font-size: 20px;
             padding-block: 5px;
