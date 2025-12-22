@@ -20,6 +20,7 @@ import SearchModel from "./search.model";
     ]
 })
 export default class SearchComponent {
+    @Input() id: number | null = null;
     @Input() model!: SearchModel;
     icons = { faSearch: faSearch };
 

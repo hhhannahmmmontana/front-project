@@ -4,7 +4,7 @@ export const routes: Routes = [
     {
         path: '',
         loadComponent: () =>
-            import("./components/home/home.component").then(m => m.HomeComponent)
+            import("./components/explore/explore.component").then(m => m.ExploreComponent)
     },
     {
         path: 'register',

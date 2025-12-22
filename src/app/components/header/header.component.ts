@@ -60,7 +60,7 @@ export class HeaderComponent {
 		private userService: UserService,
 		searchService: SearchService,
 		private snackbarService: SnackbarService,
-    	private cdr: ChangeDetectorRef
+    	cdr: ChangeDetectorRef
 	) {
 		this.searchModel = new SearchModel(searchService, snackbarService, cdr);
 	}

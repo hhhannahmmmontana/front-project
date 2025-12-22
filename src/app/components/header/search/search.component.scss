@@ -2,6 +2,10 @@
 
 .search-input {
     height: 50px;
+    @media screen and (max-width: ($md - $eps)) {
+        height: 30px;
+        font-size: 16px !important;
+    }
 }
 
 .search-hints {
@@ -20,6 +24,10 @@
 
     .search-hint {
         padding: 10px 20px;
+        @media screen and (max-width: ($md - $eps)) {
+            font-size: 16px;
+            padding-block: 5px;
+        }
         cursor: pointer;
         &:hover {
             background-color: #F7F7F7;

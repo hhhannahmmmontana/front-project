@@ -1,0 +1,32 @@
+<div class="explore-screen">
+    <div class="posts container">
+        @for (post of posts; track post.id) {
+            <div class="post">
+                <div class="header">
+                    <h2>Анекдот от {{post.date | date:'dd.MM.yyyy HH:mm'}}</h2>
+                    <a (click)="toggleFavourite(post)">
+                        @if (post.isFavourite) {
+                            <fa-icon class="star favourite" [icon]="icons.faStarSolid" />
+                        } @else {
+                            <fa-icon class="star" [icon]="icons.faStarRegular" />
+                        }
+                    </a>
+                </div>
+                <div class="content">
+                    {{post.content}}
+                </div>
+                <span class="author">Автор: {{post.author ? post.author : "Аноним"}}</span>
+                <div class="real-rating-container">
+
+                </div>
+            </div>
+        }
+        @if (loadingPosts) {
+            <div class="loading-spinner spinner-primary">
+                <mat-progress-spinner mode="indeterminate" />
+            </div>
+        }
+    </div>
+</div>
+
+<button class="create-post mobile">+</button>

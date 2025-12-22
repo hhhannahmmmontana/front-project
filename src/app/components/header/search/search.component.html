@@ -2,7 +2,7 @@
 <div class="d-flex">
     <div class="position-relative me-2 w-100">
         <input
-            id="pcSearchInput"
+            [id]="'searchInput' + ((id) ? id : '')"
             [(ngModel)]="model.searchInput"
             [ngModelOptions]="{ standalone: true }"
             (input)="searchOnInput()"
@@ -28,7 +28,7 @@
             </div>
         }
     </div>
-    <a class="search-icon">
+    <a class="search-icon pc-md">
         <fa-icon [icon]="icons.faSearch" />
     </a>
 </div>
