@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         run: |
-          npx ng build --configuration production --base-href /frontend-project/
+          npx ng build --configuration production --base-href /front-project/
 
       - name: Debug Output Structure
         run: ls -R dist
