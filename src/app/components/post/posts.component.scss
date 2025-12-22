@@ -28,10 +28,10 @@
 
         .content, .author, .tags {
             font-size: 20px;
-            line-height: 25px;
+            line-height: normal;
             @media screen and (max-width: calc($md - $eps)) {
-                font-size: 14px;
-                line-height: 18px;
+                font-size: 20px;
+                line-height: normal;
             }
         }
 
@@ -41,7 +41,7 @@
             align-items: center;
             @media screen and (max-width: calc($md - $eps)) {
                 width: 100%;
-                font-size: 16px;
+                font-size: 20px;
                 margin-bottom: 5px;
             }
         }

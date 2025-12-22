@@ -3,8 +3,8 @@
 .search-input {
     height: 50px;
     @media screen and (max-width: ($md - $eps)) {
-        height: 30px;
-        font-size: 16px !important;
+        height: 40px;
+        font-size: 20px !important;
     }
 }
 
@@ -25,7 +25,7 @@
     .search-hint {
         padding: 10px 20px;
         @media screen and (max-width: ($md - $eps)) {
-            font-size: 16px;
+            font-size: 20px;
             padding-block: 5px;
         }
         cursor: pointer;
