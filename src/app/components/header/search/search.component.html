@@ -23,7 +23,7 @@
                     </li>
                 } @else {
                     @for (hint of model.hints; track hint) {
-                        <li class="search-hint">{{hint}}</li>
+                        <a (mousedown)="model.searchInput = hint; search()"><li class="search-hint">{{hint}}</li></a>
                     }
                 }
             </div>
