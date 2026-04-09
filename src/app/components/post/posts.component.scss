@@ -34,6 +34,9 @@
         .content, .author, .tags {
             font-size: 20px;
             line-height: normal;
+            word-wrap: break-word;
+            word-break: break-word;
+            hyphens: auto;  
             @media screen and (max-width: calc($md - $eps)) {
                 font-size: 20px;
                 line-height: normal;

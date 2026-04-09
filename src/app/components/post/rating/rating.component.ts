@@ -75,6 +75,9 @@ export class RatingComponent implements OnDestroy {
         }
 
         const prevRating = this.post.rating;
+        if (!prevRating) {
+            this.post.ratesAmount += 1;
+        }
         this.post.userRating = rating;
 
         this.sub.add(this.exploreService.ratePost(this.post.id, rating)
@@ -84,6 +87,9 @@ export class RatingComponent implements OnDestroy {
                         this.post.userRating = null;
                     } else {
                         this.post.userRating = prevRating;
+                        if (!prevRating) {
+                            this.post.ratesAmount -= 1;
+                        }
                     }
                     this.cdr.detectChanges();
                     this.snackbarService.err(err);

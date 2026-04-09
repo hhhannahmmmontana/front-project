@@ -8,5 +8,5 @@ export default interface PostModel {
     ratesAmount: number,
     userRating: number | null,
     isFavourite: boolean,
-    tags: Set<string>
+    tags: string[]
 }

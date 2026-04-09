@@ -97,7 +97,6 @@ class ExploreService {
 
     create(createRequest: CreatePostRequest): Observable<PostModel> {
         this.checkIfAuthorizedOrThrow();
-        debugger
         return this.httpClient.post<PostModel>(`${this.url}`, {
             text: createRequest.text,
             tags: Array.from(createRequest.tags),

@@ -63,7 +63,6 @@ export class PostsComponent {
     dropdownedPost: PostModel | null = null;
 
     ngOnInit() {
-        this.loadPosts();
         this.sub.add(this.userService.currentUser$.subscribe({
             next: user => {
                 this.currentUser = user;
@@ -76,20 +75,22 @@ export class PostsComponent {
         this.sub.add(this.route.queryParams.subscribe(params => {
             const newSearch = params['q'] ?? null;
             const newTag = params['tag'] ?? null;
-            const newFavourites = params['favourites'] ?? false;
+            const newFavourites = params['favourites'] === 'true';
 
             if (newSearch !== this.search || newTag != this.tag || newFavourites != this.onlyFavourites) {
                 this.search = newSearch;
                 this.tag = newTag;
                 this.onlyFavourites = newFavourites;
-                this.postsToken = null;
-
-                this.dropdownedPost = null;
-                this.postsToken = null;
-                this.posts = [];
-                this.loadPosts();
             }
+            this.clearPosts();
+            this.loadPosts();
         }));
+    }
+
+    private clearPosts() {
+        this.dropdownedPost = null;
+        this.postsToken = null;
+        this.posts = [];
     }
 
     get authorized(): boolean {
@@ -111,6 +112,7 @@ export class PostsComponent {
 		}
 
 		this.loadingPosts = true;
+        debugger
 		this.sub.add(this.exploreService.getPosts(
                 POSTS_PAGE_SIZE,
                 this.postsToken,
