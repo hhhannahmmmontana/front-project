@@ -5,7 +5,7 @@ export default interface PostModel {
     createdAt: Date,
     author: string | null,
     rating: number,
-    ratingAmount: number,
+    ratesAmount: number,
     userRating: number | null,
     isFavourite: boolean,
     tags: Set<string>
