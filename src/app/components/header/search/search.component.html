@@ -13,21 +13,6 @@
             autocomplete="off"
             (keydown.enter)="search()"
         />
-        @if (model.searchFocused && (model.hints.length > 0 || model.searchLoading)) {
-            <div class="search-hints w-100">
-                @if (model.hints.length == 0) {
-                    <li class="spinner-hint">
-                        <div class="search-spinner spinner-primary">
-                            <mat-progress-spinner mode="indeterminate" />
-                        </div>
-                    </li>
-                } @else {
-                    @for (hint of model.hints; track hint) {
-                        <a (mousedown)="model.searchInput = hint; search()"><li class="search-hint">{{hint}}</li></a>
-                    }
-                }
-            </div>
-        }
     </div>
     <a class="search-icon pc-md">
         <fa-icon (click)="search()" [icon]="icons.faSearch" />

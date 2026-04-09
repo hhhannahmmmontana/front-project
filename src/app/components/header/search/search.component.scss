@@ -8,45 +8,6 @@
     }
 }
 
-.search-hints {
-    padding-block: 10px;
-    display: block;
-    background-color: $color-bg-100;
-    position: absolute;
-    left: 0;
-    width: 100%;
-    font-size: 24px;
-    list-style-type: none;
-    margin-top: 10px;
-    border-radius: 10px;
-    box-shadow: $default-shadow;
-    overflow: hidden;
-
-    .search-hint {
-        padding: 15px 20px;
-        z-index: 100;
-        @media screen and (max-width: ($md - $eps)) {
-            font-size: 20px;
-            padding-block: 5px;
-        }
-        cursor: pointer;
-        &:hover {
-            background-color: #F7F7F7;
-        }
-    }
-
-    .search-spinner {
-        * {
-            max-height: 50px;
-        }
-    }
-
-    .spinner-hint {
-        display: flex;
-        justify-content: center;
-    }
-}
-
 .search-icon {
     font-size: 24px;
     color: $color-accent-text;

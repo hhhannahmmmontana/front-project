@@ -8,7 +8,7 @@ import SearchModel from "./search.model";
 
 @Component({
     selector: "app-search",
-    imports: [FormsModule, MatProgressSpinner, FontAwesomeModule],
+    imports: [FormsModule, FontAwesomeModule],
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss'],
     providers: [
