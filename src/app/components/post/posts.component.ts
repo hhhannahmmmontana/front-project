@@ -123,7 +123,7 @@ export class PostsComponent {
 			}))
 			.subscribe({
 				next: res => {
-					this.posts = [...this.posts, ...res.posts];
+					this.posts = [...this.posts, ...res.value];
 					this.postsToken = res.token;
 				},
 				error: err => this.snackbarService.err(err)

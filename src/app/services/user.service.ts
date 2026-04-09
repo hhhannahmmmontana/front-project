@@ -45,7 +45,6 @@ export default class UserService {
             }
 
             const model: UserModel = {
-                id: user.id,
                 username: user.username
             };
 

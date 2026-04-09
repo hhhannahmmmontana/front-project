@@ -1,6 +1,6 @@
 import CommentModel from "../models/comment.model";
 
 export default interface GetCommentsResponse {
-    comments: CommentModel[],
+    value: CommentModel[],
     token: string | null
 }

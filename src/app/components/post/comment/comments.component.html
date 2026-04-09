@@ -13,9 +13,9 @@
     @for (comment of comments; track comment.id) {
         <div class="comment">
             <div class="content">
-                {{comment.content}}
+                {{comment.text}}
             </div>
-            <div class="author">{{comment.author ?? 'Аноним'}} в {{comment.date | date:'HH:mm, dd.MM.yyyy'}}</div>
+            <div class="author">{{comment.username ?? 'Аноним'}} в {{comment.createdAt | date:'HH:mm, dd.MM.yyyy'}}</div>
         </div>
     }
     <div class="leave-comment comment">

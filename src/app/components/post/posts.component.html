@@ -2,7 +2,7 @@
     @for (post of posts; track post.id) {
         <div class="post">
             <div class="header">
-                <h2>Анекдот от {{post.date | date:'dd.MM.yyyy HH:mm'}}</h2>
+                <h2>Анекдот от {{post.createdAt | date:'dd.MM.yyyy HH:mm'}}</h2>
                 <a (click)="toggleFavourite(post)">
                     @if (post.isFavourite) {
                         <fa-icon class="star-favourite favourite" [icon]="icons.faStarSolid" />
@@ -22,7 +22,7 @@
                 }</div>
             }
             <div class="content">
-                {{post.content}}
+                {{post.text}}
             </div>
 
             <div class="d-flex justify-content-between align-items-center">

@@ -1,8 +1,8 @@
 
 export default interface PostModel {
     id: number,
-    content: string,
-    date: Date,
+    text: string,
+    createdAt: Date,
     author: string | null,
     rating: number,
     ratingAmount: number,

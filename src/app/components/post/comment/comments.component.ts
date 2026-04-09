@@ -50,7 +50,8 @@ export class CommentsComponent implements OnDestroy {
 			}))
 			.subscribe({
 				next: response => {
-					this.comments = [...response.comments, ...this.comments];
+					const t = response.value.reverse();
+					this.comments = [...t, ...this.comments];
 					this.token = response.token;
 				},
 				error: err => this.snackbarService.err(err)
