@@ -14,7 +14,6 @@ import { environment } from "../../environments/development.environment";
 class ExploreService {
     private readonly url = environment.apiDomain + "/jk";
     private currentUser: UserModel | null = null;
-
     constructor(
         private httpClient: HttpClient,
         private userService: UserService
