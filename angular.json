@@ -57,7 +57,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/front-project/"
+              "baseHref": "/"
             },
             "development": {
               "optimization": false,
