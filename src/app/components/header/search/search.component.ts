@@ -24,12 +24,6 @@ export default class SearchComponent {
     @Input() model!: SearchModel;
     icons = { faSearch: faSearch };
 
-    ngOnInit() {
-        if (this.model) {
-            this.model.init();
-        }
-    }
-
     ngOnDestroy() {
         if (this.model) {
             this.model.destroy();

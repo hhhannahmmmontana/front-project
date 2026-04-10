@@ -44,7 +44,6 @@ export class PostsComponent {
     	const height = document.documentElement.scrollHeight;
     	const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     	const clientHeight = document.documentElement.clientHeight;
-        debugger
 
 		if (this.postsToken != null && scrollTop + clientHeight >= height - 100) {
 			this.loadPosts();
@@ -139,11 +138,12 @@ export class PostsComponent {
         }))
         .subscribe({
             next: (res: GetPostsResponse) => {
-                debugger
                 this.posts = [...this.posts, ...res.value];
                 this.postsToken = res.nextToken;
             },
-            error: err => this.snackbarService.err(err)
+            error: err => {
+                this.snackbarService.err(err);
+            }
         });
 	}
 

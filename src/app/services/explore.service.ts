@@ -34,15 +34,13 @@ class ExploreService {
             query SearchJokesByTag(
                 $pageSize: Int!,
                 $token: String,
-                $tags: [String!],
-                $username: String
+                $tags: [String!]
             ) {
                 jokes(
                     input: {
                         pageSize: $pageSize,
                         token: $token,
-                        tags: $tags,
-                        username: $username
+                        tags: $tags
                     }
                 ) {
                     value {
@@ -67,8 +65,7 @@ class ExploreService {
             variables: {
                 pageSize: this.PAGE_SIZE,
                 token,
-                tags: [tag],
-                username: "volodyapokalipsis"
+                tags: [tag]
             }
         }));
     }
@@ -79,14 +76,12 @@ class ExploreService {
         const query = gql`
             query SearchJokesByTag(
                 $pageSize: Int!,
-                $token: String,
-                $username: String
+                $token: String
             ) {
                 jokes(
                     input: {
                         pageSize: $pageSize,
                         token: $token,
-                        username: $username,
                         isFavourites: true
                     }
                 ) {
@@ -111,8 +106,7 @@ class ExploreService {
             query,
             variables: {
                 pageSize: this.PAGE_SIZE,
-                token,
-                username: "volodyapokalipsis",
+                token
             }
         }));
     }
@@ -125,15 +119,13 @@ class ExploreService {
             query SearchJokesByTag(
                 $pageSize: Int!,
                 $token: String,
-                $search: String!,
-                $username: String
+                $search: String!
             ) {
                 jokes(
                     input: {
                         pageSize: $pageSize,
                         token: $token,
-                        search: $search,
-                        username: $username
+                        search: $search
                     }
                 ) {
                     value {
@@ -158,8 +150,7 @@ class ExploreService {
             variables: {
                 pageSize: this.PAGE_SIZE,
                 token,
-                search,
-                username: "volodyapokalipsis",
+                search
             }
         }));
     }
@@ -170,14 +161,12 @@ class ExploreService {
         const query = gql`
             query SearchJokesByTag(
                 $pageSize: Int!,
-                $token: String,
-                $username: String
+                $token: String
             ) {
                 jokes(
                     input: {
                         pageSize: $pageSize,
-                        token: $token,
-                        username: $username
+                        token: $token
                     }
                 ) {
                     value {
@@ -201,8 +190,7 @@ class ExploreService {
             query,
             variables: {
                 pageSize: this.PAGE_SIZE,
-                token,
-                username: "volodyapokalipsis",
+                token
             }
         }));
     }
@@ -233,43 +221,31 @@ class ExploreService {
     }
 
     ratePost(postId: number, rating: number): Observable<void> {
-        debugger
         this.checkIfAuthorizedOrThrow();
-        return this.httpClient.post<void>(`${this.url}/${postId}/rate`, {
-            rating: rating,
-            username: "volodyapokalipsis",
-        });
+        return this.httpClient.post<void>(`${this.url}/${postId}/rate?rating=${rating}`, {});
     }
 
     commentPost(postId: number, content: string): Observable<CommentModel> {
         return this.httpClient.post<CommentModel>(`${this.url}/${postId}/comment`, {
-            text: content,
-            username: "volodyapokalipsis",
+            text: content
         });
     }
 
     addToFavourites(postId: number): Observable<void> {
         this.checkIfAuthorizedOrThrow();
-        return this.httpClient.post<void>(`${this.url}/${postId}/favourite`, {
-            username: "volodyapokalipsis"
-        });
+        return this.httpClient.post<void>(`${this.url}/${postId}/favourite`, {});
     }
 
     removeFromFavorites(postId: number): Observable<void> {
         this.checkIfAuthorizedOrThrow();
-        return this.httpClient.delete<void>(`${this.url}/${postId}/favourite`, {
-            body: {
-                username: "volodyapokalipsis"
-            }
-        });
+        return this.httpClient.delete<void>(`${this.url}/${postId}/favourite`);
     }
 
     create(createRequest: CreatePostRequest): Observable<PostModel> {
         this.checkIfAuthorizedOrThrow();
         return this.httpClient.post<PostModel>(`${this.url}`, {
             text: createRequest.text,
-            tags: Array.from(createRequest.tags),
-            username: "volodyapokalipsis"
+            tags: Array.from(createRequest.tags)
         });
     }
 

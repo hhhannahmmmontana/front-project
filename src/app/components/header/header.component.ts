@@ -8,7 +8,6 @@ import { finalize, Subscription} from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import SearchComponent from './search/search.component';
 import SearchModel from './search/search.model';
-import SearchService from '../../services/search.service';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Router, RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
@@ -58,12 +57,11 @@ export class HeaderComponent {
 
 	constructor(
 		private userService: UserService,
-		searchService: SearchService,
 		private snackbarService: SnackbarService,
     	cdr: ChangeDetectorRef,
 		router: Router
 	) {
-		this.searchModel = new SearchModel(searchService, snackbarService, cdr, router);
+		this.searchModel = new SearchModel(router);
 	}
 
 	ngOnInit() {

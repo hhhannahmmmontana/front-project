@@ -1,107 +1,79 @@
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, defer, delay, dematerialize, materialize, Observable, of, tap, throwError } from "rxjs";
-import UserModel from "../models/user.model";
+import { BehaviorSubject, map, Observable, of, tap } from "rxjs";
 import LoginRequest from "../requests/login.request";
 import RegisterRequest from "../requests/register.request";
+import { environment } from "@env";
 
-class MockUser {
-    constructor (
-        public id: number,
-        public username: string,
-        public password: string
-    ) { }
+export interface User {
+    username: string;
 }
 
-const USERS_KEY = 'mock_users';
-const CURRENT_USER_KEY = 'current_user';
+interface AuthResponse {
+    access_token: string;
+    user: User
+}
 
 @Injectable({ providedIn: 'root' })
 export default class UserService {
-    users = new Map<string, MockUser>();
-    private currentUserSubject = new BehaviorSubject<UserModel | null>(null);
-    currentUser$ = this.currentUserSubject.asObservable();
+    private readonly url = environment.apiDomain + "/auth";
+    private readonly TOKEN_KEY = 'access_token';
+    private readonly USER_KEY = 'user';
+    private currentTokenSubject = new BehaviorSubject<string | null>(this.loadToken());
+    public currentToken$ = this.currentTokenSubject.asObservable();
 
-    counter = 0;
+    private currentUserSubject = new BehaviorSubject<User | null>(this.loadUser());
+    public currentUser$ = this.currentUserSubject.asObservable();
 
     constructor(
         private httpClient: HttpClient
-    ) {
-        this.restore();
-    }
+    ) {}
 
-    login(request: LoginRequest) {
-        return defer(() => {
-            const user = this.users.get(request.username);
-
-            if (!user || user.password !== request.password) {
-                return throwError(() => new HttpErrorResponse({
-                    status: 401,
-                    statusText: 'Unauthorized',
-                    error: {
-                        message: 'Invalid credentials'
-                    }
-                }));
-            }
-
-            const model: UserModel = {
-                username: user.username
-            };
-
-            this.currentUserSubject.next(model);
-            localStorage.setItem('current_user', JSON.stringify(model));
-
-            return of(void 0);
-        }).pipe(
-            materialize(),
-            delay(1000),
-            dematerialize()
-        );
+    login(request: LoginRequest): Observable<void> {
+        return this.httpClient
+            .post<AuthResponse>(this.url + "/login", request)
+            .pipe(
+                tap(response => this.setSession(response)),
+                map(_ => {})
+            );
     }
 
     register(request: RegisterRequest): Observable<void> {
-        const user = new MockUser(
-            ++this.counter,
-            request.username,
-            request.password
-        );
-        this.users.set(request.username, user);
-
-        localStorage.setItem(
-            USERS_KEY,
-            JSON.stringify([...this.users.values()])
-        );
-
-        return this.login(new LoginRequest(
-            request.username,
-            request.password
-        ));
+        return this.httpClient
+            .post<AuthResponse>(this.url + "/register", request)
+            .pipe(
+                tap(response => this.setSession(response)),
+                map(_ => {})
+            );
     }
 
     logout(): Observable<void> {
-        return of(void 0).pipe(
-                delay(1000),
-                tap(() => {
-                    this.currentUserSubject.next(null);
-                    localStorage.removeItem(CURRENT_USER_KEY);
-                })
-        );
+        localStorage.removeItem(this.TOKEN_KEY);
+        localStorage.removeItem(this.USER_KEY);
+        return of();
     }
 
-    private restore() {
-        const usersRaw = localStorage.getItem(USERS_KEY);
-        const currentUserRaw = localStorage.getItem(CURRENT_USER_KEY);
+    getToken(): string | null {
+        return this.currentTokenSubject.value;
+    }
 
-        if (usersRaw) {
-            const usersArray: MockUser[] = JSON.parse(usersRaw);
-            usersArray.forEach(user => {
-                this.users.set(user.username, user);
-                this.counter = Math.max(this.counter, user.id);
-            });
-        }
+    private loadToken(): string | null {
+        return localStorage.getItem(this.TOKEN_KEY);
+    }
 
-        if (currentUserRaw) {
-            this.currentUserSubject.next(JSON.parse(currentUserRaw));
+    private loadUser(): User | null {
+        const user = localStorage.getItem(this.USER_KEY);
+        if (user) {
+            return JSON.parse(user);
+        } else {
+            return null;
         }
     }
+
+    private setSession(response: AuthResponse): void {
+        localStorage.setItem(this.TOKEN_KEY, response.access_token);
+        localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
+        this.currentTokenSubject.next(response.access_token);
+        this.currentUserSubject.next(response.user);
+    }    
 }

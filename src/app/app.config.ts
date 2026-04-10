@@ -2,11 +2,12 @@ import { ApplicationConfig, inject, provideBrowserGlobalErrorListeners } from '@
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { environment } from '../environments/environment';
 import { InMemoryCache } from '@apollo/client';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,7 +15,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withFetch(),
-      withInterceptorsFromDi()
+      withInterceptorsFromDi(),
+      withInterceptors([authInterceptor])
     ),
     provideApollo(() => {
       const httpLink = inject(HttpLink);

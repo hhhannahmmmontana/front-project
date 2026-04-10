@@ -36,6 +36,10 @@ export class CreateComponent implements OnDestroy {
 
     create() {
         const r = this.createRequest;
+        if (r.text.length < 10) {
+            this.snackbarService.show("Длина текста должна быть не меньше 10!");
+            return;
+        }
         this.sub.add(
             this.exploreService
                 .create(this.createRequest)
