@@ -38,7 +38,10 @@
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@ng-bootstrap/ng-bootstrap": "^20.0.0",
     "@popperjs/core": "^2.11.8",
+    "apollo-angular": "^13.0.0",
     "bootstrap": "^5.3.8",
+    "gql-query-builder": "^3.8.0",
+    "graphql": "^16.13.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -47,6 +50,10 @@
     "@angular/cli": "^21.0.2",
     "@angular/compiler-cli": "^21.0.0",
     "@angular/localize": "^21.0.0",
+    "@graphql-codegen/cli": "^6.2.1",
+    "@graphql-codegen/typescript": "^5.0.9",
+    "@graphql-codegen/typescript-apollo-angular": "^5.0.0",
+    "@graphql-codegen/typescript-operations": "^5.0.9",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"

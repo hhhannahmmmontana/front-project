@@ -1,56 +1,225 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, of, throwError } from "rxjs";
+import { filter, map, Observable, of, throwError } from "rxjs";
 import PostModel from "../models/post.model";
 import CommentModel from "../models/comment.model";
 import UserService from "./user.service";
 import UserModel from "../models/user.model";
-import GetPostsResponse from "../responses/get-posts.response";
 import GetCommentsResponse from "../responses/get-comments.response";
 import CreatePostRequest from "../requests/create-post.request";
-import { environment } from "../../environments/development.environment";
+import { environment } from "@env";
+import { Apollo, gql } from 'apollo-angular';
+import GetPostsResponse from "../responses/get-posts.response";
 
 @Injectable({ providedIn: 'root' })
 class ExploreService {
     private readonly url = environment.apiDomain + "/jk";
+    private readonly PAGE_SIZE = 5;
     private currentUser: UserModel | null = null;
     constructor(
         private httpClient: HttpClient,
-        private userService: UserService
+        private userService: UserService,
+        private apollo: Apollo
     ) {
         this.userService.currentUser$.subscribe(user => {
             this.currentUser = user;
         });
     }
 
-    getPosts(
-        pageSize: number,
-        token: string | null,
-        tag: string | null,
-        search: string | null,
-        onlyFavourites: boolean
+    getPostsByTag(
+        tag: string,
+        token: string | null = null,
     ): Observable<GetPostsResponse> {
-        let tUrl = this.url;
-        let filters = [];
-        tUrl += `?pageSize=${pageSize}`;
-        if (token) {
-            filters.push(`token=${token}`);
-        }
-        if (tag) {
-            filters.push(`tags=${tag}`);
-        }
-        if (search) {
-            filters.push(`search=${search}`);
-        }
-        if (onlyFavourites) {
-            filters.push(`isFavourites=true`)
-        }
-        filters.push("username=volodyapokalipsis")
-        if (filters.length > 0) {
-            tUrl += '&';
-        }
-        tUrl += filters.join('&');
-        return this.httpClient.get<GetPostsResponse>(tUrl);
+        const query = gql`
+            query SearchJokesByTag(
+                $pageSize: Int!,
+                $token: String,
+                $tags: [String!],
+                $username: String
+            ) {
+                jokes(
+                    input: {
+                        pageSize: $pageSize,
+                        token: $token,
+                        tags: $tags,
+                        username: $username
+                    }
+                ) {
+                    value {
+                        id
+                        text
+                        tags
+                        rating
+                        ratesAmount
+                        author
+                        createdAt
+                        isFavourite
+                        userRating
+                    }
+                    nextToken
+                }
+            }
+        `;
+        return this.pipeApollo(this.apollo.query<{
+            jokes: GetPostsResponse
+        }>({
+            query,
+            variables: {
+                pageSize: this.PAGE_SIZE,
+                token,
+                tags: [tag],
+                username: "volodyapokalipsis"
+            }
+        }));
+    }
+
+    getFavourites(
+        token: string | null = null
+    ): Observable<GetPostsResponse> {
+        const query = gql`
+            query SearchJokesByTag(
+                $pageSize: Int!,
+                $token: String,
+                $username: String
+            ) {
+                jokes(
+                    input: {
+                        pageSize: $pageSize,
+                        token: $token,
+                        username: $username,
+                        isFavourites: true
+                    }
+                ) {
+                    value {
+                        id
+                        text
+                        tags
+                        rating
+                        ratesAmount
+                        author
+                        createdAt
+                        isFavourite
+                        userRating
+                    }
+                    nextToken
+                }
+            }
+        `;
+        return this.pipeApollo(this.apollo.query<{
+            jokes: GetPostsResponse
+        }>({
+            query,
+            variables: {
+                pageSize: this.PAGE_SIZE,
+                token,
+                username: "volodyapokalipsis",
+            }
+        }));
+    }
+
+    searchPosts(
+        search: string,
+        token: string | null = null
+    ): Observable<GetPostsResponse> {
+        const query = gql`
+            query SearchJokesByTag(
+                $pageSize: Int!,
+                $token: String,
+                $search: String!,
+                $username: String
+            ) {
+                jokes(
+                    input: {
+                        pageSize: $pageSize,
+                        token: $token,
+                        search: $search,
+                        username: $username
+                    }
+                ) {
+                    value {
+                        id
+                        text
+                        tags
+                        rating
+                        ratesAmount
+                        author
+                        createdAt
+                        isFavourite
+                        userRating
+                    }
+                    nextToken
+                }
+            }
+        `;
+        return this.pipeApollo(this.apollo.query<{
+            jokes: GetPostsResponse
+        }>({
+            query,
+            variables: {
+                pageSize: this.PAGE_SIZE,
+                token,
+                search,
+                username: "volodyapokalipsis",
+            }
+        }));
+    }
+
+    getPosts(
+        token: string | null = null
+    ): Observable<GetPostsResponse> {
+        const query = gql`
+            query SearchJokesByTag(
+                $pageSize: Int!,
+                $token: String,
+                $username: String
+            ) {
+                jokes(
+                    input: {
+                        pageSize: $pageSize,
+                        token: $token,
+                        username: $username
+                    }
+                ) {
+                    value {
+                        id
+                        text
+                        tags
+                        rating
+                        ratesAmount
+                        author
+                        createdAt
+                        isFavourite
+                        userRating
+                    }
+                    nextToken
+                }
+            }
+        `;
+        return this.pipeApollo(this.apollo.query<{
+            jokes: GetPostsResponse
+        }>({
+            query,
+            variables: {
+                pageSize: this.PAGE_SIZE,
+                token,
+                username: "volodyapokalipsis",
+            }
+        }));
+    }
+
+    private pipeApollo(
+        query: Observable<Apollo.QueryResult<{
+            jokes: GetPostsResponse;
+        }>>
+    ): Observable<GetPostsResponse>  {
+        return query.pipe(
+            filter(it => it.data != undefined),
+            map(it => it.data!.jokes),
+            map(it => ({
+                nextToken: it.nextToken,
+                value: it.value.map((post: PostModel) => ({ ...post }))
+            }))
+        );
     }
 
     getPostComments(
@@ -64,6 +233,7 @@ class ExploreService {
     }
 
     ratePost(postId: number, rating: number): Observable<void> {
+        debugger
         this.checkIfAuthorizedOrThrow();
         return this.httpClient.post<void>(`${this.url}/${postId}/rate`, {
             rating: rating,

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, HostListener, Input } from "@angular/core";
-import { finalize, Subscription } from "rxjs";
+import { finalize, Observable, Subscription } from "rxjs";
 import ExploreService from "../../services/explore.service";
 import { SnackbarService } from "../../services/snackbar.service";
 import PostModel from "../../models/post.model";
@@ -14,6 +14,7 @@ import UserService from "../../services/user.service";
 import UserModel from "../../models/user.model";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { CreateComponent } from "../create/create.component";
+import GetPostsResponse from "../../responses/get-posts.response";
 
 const POSTS_PAGE_SIZE = 9;
 
@@ -43,6 +44,7 @@ export class PostsComponent {
     	const height = document.documentElement.scrollHeight;
     	const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
     	const clientHeight = document.documentElement.clientHeight;
+        debugger
 
 		if (this.postsToken != null && scrollTop + clientHeight >= height - 100) {
 			this.loadPosts();
@@ -112,24 +114,37 @@ export class PostsComponent {
 		}
 
 		this.loadingPosts = true;
-        debugger
-		this.sub.add(this.exploreService.getPosts(
-                POSTS_PAGE_SIZE,
-                this.postsToken,
-                this.tag,
+        let f: Observable<GetPostsResponse>;
+        if (this.search) {
+            f = this.exploreService.searchPosts(
                 this.search,
-                this.onlyFavourites
-            ).pipe(finalize(() => {
-				this.loadingPosts = false;
-				this.cdr.detectChanges();
-			}))
-			.subscribe({
-				next: res => {
-					this.posts = [...this.posts, ...res.value];
-					this.postsToken = res.token;
-				},
-				error: err => this.snackbarService.err(err)
-			}));
+                this.postsToken
+            );
+        } else if (this.tag) {
+            f = this.exploreService.getPostsByTag(
+                this.tag,
+                this.postsToken
+            );
+        } else if (this.onlyFavourites === true) {
+            f = this.exploreService.getFavourites(
+                this.postsToken
+            );
+        } else {
+            f = this.exploreService.getPosts(this.postsToken);
+        }
+
+		f.pipe(finalize(() => {
+            this.loadingPosts = false;
+            this.cdr.detectChanges();
+        }))
+        .subscribe({
+            next: (res: GetPostsResponse) => {
+                debugger
+                this.posts = [...this.posts, ...res.value];
+                this.postsToken = res.nextToken;
+            },
+            error: err => this.snackbarService.err(err)
+        });
 	}
 
 	toggleFavourite(post: PostModel) {
@@ -142,10 +157,10 @@ export class PostsComponent {
 		post.isFavourite = !post.isFavourite;
 
 		const command = post.isFavourite
-				? this.exploreService.addToFavourites(post.id)
-				: this.exploreService.removeFromFavorites(post.id)
+            ? this.exploreService.addToFavourites(post.id)
+            : this.exploreService.removeFromFavorites(post.id)
 
-			
+
         this.sub.add(command
             .pipe(finalize(() => this.cdr.detectChanges()))
             .subscribe({

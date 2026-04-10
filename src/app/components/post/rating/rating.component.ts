@@ -78,11 +78,16 @@ export class RatingComponent implements OnDestroy {
         if (!prevRating) {
             this.post.ratesAmount += 1;
         }
+        debugger
         this.post.userRating = rating;
 
         this.sub.add(this.exploreService.ratePost(this.post.id, rating)
             .subscribe({
+                next: value => {
+                    debugger
+                },
                 error: err => {
+                    debugger
                     if ([401, 403].includes(err.status)) {
                         this.post.userRating = null;
                     } else {
