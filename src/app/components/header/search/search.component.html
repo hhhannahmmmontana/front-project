@@ -1,0 +1,20 @@
+
+<div class="d-flex">
+    <div class="position-relative me-2 w-100">
+        <input
+            [id]="'searchInput' + ((id) ? id : '')"
+            [(ngModel)]="model.searchInput"
+            [ngModelOptions]="{ standalone: true }"
+            (input)="searchOnInput()"
+            class="search-input w-100"
+            placeholder="Введите запрос..."
+            (focus)="searchOnFocus()"
+            (blur)="searchOnBlur()"
+            autocomplete="off"
+            (keydown.enter)="search()"
+        />
+    </div>
+    <a class="search-icon pc-md">
+        <fa-icon (click)="search()" [icon]="icons.faSearch" />
+    </a>
+</div>

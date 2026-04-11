@@ -1,0 +1,10 @@
+<div class="explore-screen container">
+    @if (query) {
+        <h2>Результаты по запросу "{{query}}"</h2>
+    } @else if (tag) {
+        <h2 class="tag">#{{tag}}</h2>
+    } @else if (onlyFavourites) {
+        <h2>Избранное <fa-icon class="star-icon" [icon]="icons.faStar" /></h2>
+    }
+    <app-posts />
+</div>

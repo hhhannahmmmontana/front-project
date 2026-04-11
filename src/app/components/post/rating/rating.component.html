@@ -1,0 +1,26 @@
+<div class="rating-container">
+    <div class="d-flex flex-column">
+        <div class="position-relative" (mouseleave)="onStarLeave()">
+            <div class="stars-layer stars-empty">
+                @for (i of starsRange; track i) {
+                    <fa-icon
+                        [icon]="icons.faStarRegular"
+                        class="star-icon"
+                        (mouseenter)="onStarHover(i)"
+                        (click)="ratePost(i)"
+                    ></fa-icon>
+                }
+            </div>
+            <div
+                class="stars-layer stars-filled"
+                [ngClass]="getStarColorClass()"
+                [style.width.%]="getStarWidth()"
+            >
+                @for (i of starsRange; track i) {
+                    <fa-icon [icon]="icons.faStarSolid" class="star-icon"></fa-icon>
+                }
+            </div>
+        </div>
+        <span class="rated-amount text-end">Оценили: {{post.ratesAmount}}</span>
+    </div>
+</div>

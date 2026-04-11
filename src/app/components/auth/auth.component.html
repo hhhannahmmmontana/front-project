@@ -1,0 +1,43 @@
+
+<div class="auth-screen">
+    <div class="auth-menu">
+        @if (type == 'register') {
+            <h1>Регистрация</h1>
+        } @else if (type == 'login') {
+            <h1>Вход</h1>
+        }
+        <input
+            id="usernameInput"
+            class="auth-input"
+            type="text"
+            placeholder="Введите имя пользователя"
+            autocomplete="new-password"
+            [(ngModel)]="username"
+            (keydown.enter)="passwordInput.focus()"
+        />
+        <input
+            #passwordInput
+            id="passwordInput"
+            class="auth-input"
+            type="password"
+            placeholder="Введите пароль"
+            [autocomplete]="type === 'login' ? 'current-password' : 'new-password'"
+            [(ngModel)]="password"
+            (keydown.enter)="onConfirm()"
+        />
+        @if (type =='login') {
+            <span class="alter">Нет аккаунта? <a routerLink="/register">Зарегистрироваться</a></span>
+        } @else if (type == 'register') {
+            <span class="alter">Уже зарегистрированы? <a routerLink="/login">Войти</a></span>
+        }
+        <button (click)="onConfirm()" class="auth-confirm" [class.loading]="loading" [disabled]=" !username || !password">
+            @if (loading) {
+                <div class="btn-spinner spinner-secondary">
+                    <mat-progress-spinner mode="indeterminate" />
+                </div>
+            } @else {
+                Подтвердить
+            }
+        </button>
+    </div>
+</div>

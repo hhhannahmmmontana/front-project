@@ -1,0 +1,108 @@
+@use 'variables' as *;
+
+header {
+    background-color: $color-accent-bg-100;
+    padding-block: 20px;
+    box-shadow: $default-shadow;
+
+    .link {
+        color: $white;
+        font-size: 24px;
+        font-weight: 500;
+        padding-inline: 20px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        border-radius: 5px;
+        background-color: $color-accent-bg-200;
+        box-shadow: $default-shadow;
+        transition: $default-transition;
+
+        &:hover {
+            color: $white;
+            background-color: $color-accent-bg-300 !important;
+        }
+    }
+
+    .links {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        .link, .links-el {
+            user-select: none;
+            margin-left: 10px;
+
+            &:first-child {
+                margin-left: 0;
+            }
+        }
+    }
+
+    .menu-button {
+        color: $white;
+        font-size: 40px;
+        filter: drop-shadow($default-shadow);
+        transition: $default-transition;
+
+        .active {
+            transform: rotate(90deg);
+        }
+    }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        border-radius: 50%;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            transition: $default-transition;
+            
+            &:hover {
+                opacity: $default-hover-opacity;
+            }
+        }
+
+        &.image {
+            background-color: $color-bg-100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            * {
+                color: #444;
+                font-size: 30px;
+            }
+        }
+    }
+
+    .user-menu {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        top: 60px;
+        right: 0;
+        background-color: $color-bg-100;
+        padding: 10px;
+        border-radius: 10px;
+        box-shadow: $default-shadow;
+        z-index: 10;
+
+        a {
+            padding: 5px 10px;
+            white-space: nowrap;
+            font-size: 24px;
+            font-weight: 500;
+            transition: $default-transition;
+            color: #000;
+
+            &:hover {
+                color: $color-accent-text;
+            }
+        }
+    }
+}
