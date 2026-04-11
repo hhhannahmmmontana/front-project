@@ -64,14 +64,20 @@ export class PostsComponent {
     dropdownedPost: PostModel | null = null;
 
     ngOnInit() {
-        this.sub.add(this.userService.currentUser$.subscribe({
-            next: user => {
-                this.currentUser = user;
-            },
-            error: err => {
-                this.currentUser = null;
-            }
-        }));
+        this.sub.add(
+            this.userService.currentUser$.subscribe({
+                next: user => {
+                    this.currentUser = user;
+                    this.clearPosts();
+                    this.loadPosts();
+                },
+                error: err => {
+                    this.currentUser = null;
+                    this.clearPosts();
+                    this.loadPosts();
+                }
+            })
+        );
 
         this.sub.add(this.route.queryParams.subscribe(params => {
             const newSearch = params['q'] ?? null;

@@ -55,10 +55,10 @@ export class AuthComponent implements OnDestroy {
             }))
             .subscribe({
                 next: () => {
-                    this.router.navigateByUrl('/')
+                    window.location.href = '/';
                 },
                 error: err => {
-                    this.snackbarService.err(err)
+                    this.snackbarService.err(err);
                 }
             })
         );
